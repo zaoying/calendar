@@ -36,13 +36,7 @@
         width:100%;
     }
     tr th,tr td{
+        padding: 2% 0;
         text-align:center;
-    }
-    tr td a{
-        display:inline-block;
-        width:2em;
-        line-height:2em;
-        border-radius:50em;
-        background-color:rgba(33,33,33,0.5);
     }
 </style>

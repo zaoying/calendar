@@ -2,6 +2,7 @@
   <div class="app">
     <tab :tabItem="tabItem"></tab>
     <mTable :rows="rows" :header="header" :renderCell="renderCell"></mTable>
+    <mTable :rows="todoList"></mTable>
   </div>
 </template>
 
@@ -63,16 +64,19 @@ export default {
       this.cellStyle.cell=true;
 
       var now=new Date();
+      var date=now.getDate();
       this.current={
         year:now.getFullYear(),
         month:now.getMonth(),
-        date:now.getDate(),
-        day:now.getDay()
+        date:date
       };
+      now.setDate(1);
       var day=now.getDay();
-      var date=now.getDate();
       var time=now.getTime();
-      this.lastSunDayOfLastMonth=new Date(time-(day+date-1)*24*3600*1000);
+      console.info(day+"+"+date);
+      this.dayOfMonth=day+date;
+      this.dayOfWeek=day;
+      this.lastSunDayOfLastMonth=new Date(time-this.dayOfWeek*24*3600*1000);
   },
   components:{
     'tab':tab,
@@ -103,8 +107,16 @@ export default {
       for(var i=1;i<=5;i++){
         var row=[];
         for(var j=0;j<7;j++){
-          row.push(new Date(start+k*24*3600*1000));
-          k++;
+          var date=new Date(start+(k++)*24*3600*1000);
+          var currentMonth=date.getMonth();
+          var preMonth=currentMonth<this.current.month;
+          var nextMonth=currentMonth>this.current.month;
+          row.push({
+            date:date,
+            active:k===this.dayOfMonth,
+            preMonth:preMonth,
+            nextMonth:nextMonth
+            });
         }
         rows.push(row);
       }
@@ -113,7 +125,12 @@ export default {
   },
   methods:{
     'renderCell':function(row,key){
-      return '<a>'+row[key].getDate()+'</a>';
+      var data=row[key];
+      var date=data.date;
+      var style=data.active?"active":" ";
+      style+=data.preMonth?"invalid":" ";
+      style+=data.nextMonth?"invalid":" ";
+      return '<a class="item '+style+'">'+date.getDate()+'</a>';
     }
   }
 }
@@ -125,4 +142,3 @@ export default {
     flex-flow: column nowrap;
     height:100%;
   }
-</style>
