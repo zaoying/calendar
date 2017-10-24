@@ -65,17 +65,19 @@ export default {
 
       var now=new Date();
       var date=now.getDate();
+      var month=now.getMonth();
+      var year=now.getFullYear();
       this.current={
-        year:now.getFullYear(),
-        month:now.getMonth(),
+        year:year,
+        month:month,
         date:date
       };
       now.setDate(1);
       var day=now.getDay();
       var time=now.getTime();
-      console.info(day+"+"+date);
       this.dayOfMonth=day+date;
       this.dayOfWeek=day;
+      this.lastDayOfMonth=this.lengthOfMonth(year,month+1)+day;
       this.lastSunDayOfLastMonth=new Date(time-this.dayOfWeek*24*3600*1000);
   },
   components:{
@@ -108,14 +110,11 @@ export default {
         var row=[];
         for(var j=0;j<7;j++){
           var date=new Date(start+(k++)*24*3600*1000);
-          var currentMonth=date.getMonth();
-          var preMonth=currentMonth<this.current.month;
-          var nextMonth=currentMonth>this.current.month;
           row.push({
             date:date,
             active:k===this.dayOfMonth,
-            preMonth:preMonth,
-            nextMonth:nextMonth
+            preMonth:k<this.dayOfWeek,
+            nextMonth:k>this.lastDayOfMonth
             });
         }
         rows.push(row);
@@ -127,10 +126,22 @@ export default {
     'renderCell':function(row,key){
       var data=row[key];
       var date=data.date;
-      var style=data.active?"active":" ";
-      style+=data.preMonth?"invalid":" ";
-      style+=data.nextMonth?"invalid":" ";
+      var style=data.active?"active ":"";
+      style+=data.preMonth?"invalid ":"";
+      style+=data.nextMonth?"invalid ":"";
       return '<a class="item '+style+'">'+date.getDate()+'</a>';
+    },
+    'lengthOfMonth':function(year,month){
+      if(month===2){
+        if(year%400===0||(year%4===0&&year%100!==0)){
+          return 29;
+        }
+        else return 28;
+      }
+      else if(month===4||month===6||month===9||month===11){
+        return 30;
+      }
+      else return 31;
     }
   }
 }
