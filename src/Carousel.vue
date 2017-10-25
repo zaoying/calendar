@@ -14,7 +14,8 @@ export default {
         overflow-x: scroll;
         white-space: nowrap;
     }
-    .container>*{
+    .container .slide{
+        display:inline-block;
         min-width: 100%;
     }
 </style>

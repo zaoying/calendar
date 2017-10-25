@@ -2,9 +2,15 @@
   <div class="app">
     <tab :tabItem="tabItem"></tab>
     <carousel>
-      <calendar :year="year" :month="month-1" :date="date"></calendar>
-      <calendar :year="year" :month="month" :date="date"></calendar>
-      <calendar :year="year" :month="month+1" :date="date"></calendar>
+      <slide>
+        <calendar :year="year" :month="month-1" :date="date"></calendar>
+      </slide>
+      <slide>
+        <calendar :year="year" :month="month" :date="date"></calendar>
+      </slide>
+      <slide>
+        <calendar :year="year" :month="month+1" :date="date"></calendar>
+      </slide>
     </carousel>
     <mTable :rows="todoList"></mTable>
   </div>
@@ -14,6 +20,7 @@
 import tab from './Tab.vue'
 import table from './Table.vue'
 import carousel from './Carousel.vue'
+import slide from './Slide.vue'
 import calendar from './Calendar.vue'
 export default {
   name: 'app',
@@ -53,6 +60,7 @@ export default {
     'tab':tab,
     'mTable':table,
     'carousel':carousel,
+    'slide':slide,
     'calendar':calendar
   },
   computed:{
@@ -80,3 +88,4 @@ export default {
     flex-flow: column nowrap;
     height:100%;
   }
+</style>

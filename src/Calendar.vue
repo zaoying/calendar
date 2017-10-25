@@ -81,11 +81,6 @@ export default {
                 }
                 rows.push(row);
             }
-            var active=this.thisDate;
-            var position=active-1+thisFactor.firstDayOfMonth;
-            var row=Math.floor(position/7);
-            var col=position%7;
-            rows[row][col].style=this.activeStyle;
             if(thisFactor.isInCurrentMonth){
                 var today=new Date().getDate();
                 var position=today-1+thisFactor.firstDayOfMonth;
@@ -93,6 +88,11 @@ export default {
                 var col=position%7;
                 rows[row][col].style=this.todayStyle;
             }
+            var active=this.thisDate;
+            var position=active-1+thisFactor.firstDayOfMonth;
+            var row=Math.floor(position/7);
+            var col=position%7;
+            rows[row][col].style=this.activeStyle;
             return rows;
         }
     },
@@ -105,7 +105,10 @@ export default {
         },
         'onCellClick':function(cell){
             var value=cell.data;
-            this.thisDate=value.date;
+            if(value.month!==this.month){
+                console.info("跳转到"+value.month);
+            }
+            else this.thisDate=value.date;
         },
         'createItem':function(year,month,style){
             var Item=function(){};
