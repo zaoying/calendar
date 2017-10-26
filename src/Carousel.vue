@@ -11,7 +11,7 @@ export default {
 <style scoped>
     .container{
         width: 100%;
-        overflow: hidden;
+        overflow-x: scroll;
         white-space: nowrap;
     }
     .container .slide{
