@@ -6,12 +6,12 @@
 <script>
 export default {
     name:'carousel'
-}
+};
 </script>
 <style scoped>
     .container{
         width: 100%;
-        overflow-x: scroll;
+        overflow: hidden;
         white-space: nowrap;
     }
     .container .slide{

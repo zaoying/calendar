@@ -2,51 +2,39 @@
     <table class="table">
         <thead v-if="showHead">
             <tr>
-                <th :key="key" @click="mColumnClick(value,key)" v-for="(value,key) in header">{{value}}</th>
+                <slot name="header" :val="value" :headId="key" v-for="(value,key) in header">
+                    <th>{{value}}</th>
+                </slot>
             </tr>
         </thead>
         <tbody>
-            <tr :key="rowId" v-for="(row,rowId) in rows">
-                <td :key="key" @click="mCellClick(row,rowId,key)" v-for="(value,key) in header" v-html="mRender(row,key)"></td>
-            </tr>
+            <slot name="row" :rowId="rowId" :row="row" :header="header" v-for="(row,rowId) in rows">
+                <tr :key="rowId" v-for="(row,rowId) in rows">
+                    <td :key="key" v-for="(value,key) in header">{{row[key]}}</td>
+                </tr>
+            </slot>
         </tbody>
     </table>
 </template>
 <script>
     export default{
         name:'table',
-        props:['rows','header','renderCell','onColumnClick','onRowClick','onCellClick'],
-        computed:{
-            'showHead':function(){
-                return this.header;
+        props:{
+            'header':{
+                type:Array,
+                default:function(){
+                    return [];
+                }
+            },
+            'rows':{
+                type:Array,
+                required:true,
+                default:[]
             }
         },
-        methods:{
-            mRender:function (row,key) {
-                if(this.renderCell){
-                    return this.renderCell(row,key);
-                }
-                else return row[key];
-            },
-            mColumnClick:function(value,key){
-                if(this.onColumnClick){
-                    this.onColumnClick(value,key);
-                }
-            },
-            mRowClick:function(row,rowId){
-                if(this.onRowClick){
-                    this.onRowClick(row,rowId);
-                }
-            },
-            mCellClick:function(row,rowId,colId){
-                if(this.onCellClick){
-                    var cell={
-                        rowId:rowId,
-                        colId:colId,
-                        data:row[colId]
-                    };
-                    this.onCellClick(cell);
-                }
+        computed:{
+            'showHead':function(){
+                return this.header&&this.header.length>0;
             }
         }
     }

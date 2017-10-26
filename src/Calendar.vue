@@ -1,8 +1,14 @@
 <template>
-    <mTable :rows="rows" :header="header" :renderCell="renderCell" :onCellClick="onCellClick"></mTable>
+    <mTable :rows="rows" :header="header">
+        <tr slot="row" slot-scope="props">
+            <td :key="key" v-for="(value,key) in props.header">
+                <a>{{props.row[key].date}}</a>
+            </td>
+        </tr>
+    </mTable>
 </template>
 <script>
-import table from './Table.vue'
+import table from './Table.vue';
 export default {
     name:'calendar',
     props:['year','month','date'],
@@ -10,11 +16,8 @@ export default {
         return {
             thisDate:1,
             header:['日','一','二','三','四','五','六'],
-            style:['item'],
-            invalidStyle:['item','invalid'],
-            todayStyle:['item','today'],
-            activeStyle:['item','active']
-        }
+            style:{'item':true}
+        };
     },
     created:function(){
         this.thisDate=this.date;
@@ -25,29 +28,39 @@ export default {
         this.This=this.createItem(this.year,this.month,this.style);
         this.Next=this.createItem(this.year,this.month+1,this.invalidStyle);
     },
+    mounted:function(){
+        if(this.factor.isInCurrentMonth){
+            var today=new Date().getDate();
+            this.handleItem(function(item){
+                item.style.today=true;
+                return item;
+            },today);
+        }
+        this.handleItem(function(item){
+            item.style.active=true;
+            return item;
+        },this.thisDate);
+    },
     components:{
         'mTable':table
     },
-    watch:{
-        'thisDate':function(val,old){
-            // console.info(old+"->"+val);
-            // var style=this.style;
-            // var activeStyle=this.activeStyle;
-            // this.handleItem(function(item){
-            //     item.style=activeStyle;
-            //     return item;
-            // },val);
-            // this.handleItem(function(item){
-            //     item.style=style;
-            //     return item;
-            // },old);
-        }
-    },
+    // watch:{
+    //     'thisDate':function(val,old){
+    //         console.info(old+"->"+val);
+    //         var style=this.style;
+    //         var activeStyle=this.activeStyle;
+    //         this.handleItem(function(item){
+    //             item.style=activeStyle;
+    //             return item;
+    //         },val);
+    //         this.handleItem(function(item){
+    //             item.style=style;
+    //             return item;
+    //         },old);
+    //     }
+    // },
     computed:{
         'rows':function () {
-            var thisYear=this.year;
-            var thisMonth=this.month;
-
             var Last=this.Last;
             var This=this.This;
             var Next=this.Next;
@@ -60,7 +73,6 @@ export default {
             var lastSundayOfLastMonth=lastFactor.length-thisFactor.firstDayOfMonth;//上个月最后一个星期日是几号
             var positionOfLastDate=thisFactor.firstDayOfMonth+thisFactor.length;//当前月份最后一天在日历中的位置
             while(k<=positionOfLastDate){
-                var row=[];
                 var row=[];
                 for(var j=0;j<7;j++){
                     var item;
@@ -81,18 +93,6 @@ export default {
                 }
                 rows.push(row);
             }
-            if(thisFactor.isInCurrentMonth){
-                var today=new Date().getDate();
-                var position=today-1+thisFactor.firstDayOfMonth;
-                var row=Math.floor(position/7);
-                var col=position%7;
-                rows[row][col].style=this.todayStyle;
-            }
-            var active=this.thisDate;
-            var position=active-1+thisFactor.firstDayOfMonth;
-            var row=Math.floor(position/7);
-            var col=position%7;
-            rows[row][col].style=this.activeStyle;
             return rows;
         }
     },
@@ -131,14 +131,14 @@ export default {
             }
             else{
                 var position=rowNum-1+this.factor.firstDayOfMonth;
-                var rowNum=Math.floor(position/7);
-                var colNum=position%7;
+                var r=Math.floor(position/7);
+                var c=position%7;
 
-                var row=this.rows[rowNum];
-                var item=row?Object.assign({},row[colNum]):null;
+                var row=this.rows[r];
+                var item=row?Object.assign({},row[c]):null;
                 var muteItem=callback(item);
                 if(muteItem){
-                    var muteRow=row.splice(colNum,muteItem);
+                    var muteRow=row.splice(c,muteItem);
                     this.rows.splice(rowNum,muteRow);
                 }
             }
@@ -159,7 +159,7 @@ export default {
             var now = new Date();
             var _year = now.getFullYear();
             var _month = now.getMonth()+1;
-            var _date = now.getDate();
+            // var _date = now.getDate();
             var isInCurrentMonth=_year===year&&_month===month;//是否在当前月份
 
             now.setFullYear(year);
@@ -172,10 +172,10 @@ export default {
                 length:length,
                 firstDayOfMonth:firstDayOfMonth,
                 lastDayOfMonth:lastDayOfMonth
-            }
+            };
         }
     }
-}
+};
 </script>
 <style scoped>
 
