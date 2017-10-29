@@ -13,9 +13,31 @@
 import table from './Table.vue';
 export default {
     name:'calendar',
-    props:['year','month','date'],
+    props:{
+        'date':{
+            type:Object,
+            default:function () {
+                var date=new Date()
+                return {
+                    year:date.getFullYear(),
+                    month:date.getMonth()+1,
+                    date:date.getDate()
+                };
+            }
+        },
+        'itemClick':{
+            type: Function,
+            default:function(){
+                return function(value) {
+                    this.thisDate=value.date;
+                }
+            }
+        }
+    },
     data(){
         return {
+            year:this.date.year,
+            month:this.date.month,
             thisDate:1,
             header:['日','一','二','三','四','五','六'],
             rows:[],
@@ -33,7 +55,6 @@ export default {
         this.This=this.createItem(this.year,this.month,this.style);
         this.Next=this.createItem(this.year,this.month+1,this.invalidStyle);
         this.rows=this.generateRows();
-        this.thisDate=this.date;
         if(this.factor.isInCurrentMonth){
             var today=new Date().getDate();
             this.handleItem(function(item){
@@ -41,13 +62,18 @@ export default {
                 return item;
             },today);
         }
+        this.thisDate=this.date.date;
     },
     components:{
         'mTable':table
     },
     watch:{
+        'date':function () {
+            this.year=this.date.year;
+            this.month=this.date.month;
+            this.thisDate=this.date.date;
+        },
         'thisDate':function(val,old){
-            console.info(old+"->"+val);
             var style=this.style;
             var activeStyle=this.activeStyle;
             var todayStyle=this.todayStyle;
@@ -62,17 +88,8 @@ export default {
         }
     },
     methods:{
-        'renderCell':function(row,key){
-            var data=row[key];
-            var date=data.date;
-            var style=data.style.join(' ');
-            return '<a class="'+style+'">'+date+'</a>';
-        },
         'onCellClick':function(rowId,colId,value){
-            if(value.month!==this.month){
-                console.info("跳转到"+value.month);
-            }
-            else this.thisDate=value.date;
+            this.itemClick(value);
         },
         'createItem':function(year,month,style){
             var Item=function(){};
