@@ -20,9 +20,7 @@ export default {
   name: 'app',
   data () {
     return {
-      year:1970,
-      month:1,
-      date:1,
+      today:new Date(),
       monthList:[],
       activeIndex:2,
       todoList:[{
@@ -50,24 +48,23 @@ export default {
     }
   },
   created:function () {
-    var today=new Date();
-    this.year=today.getFullYear();
-    this.month=today.getMonth()+1;
-    this.date=today.getDate();
-    function Month() {
-      
-    };
-    Month.prototype={
-      date:this.date
-    };
-    var monthList=[];
-    for(var i=-2;i<=2;i++){
-      var month=new Month();
-      month.month=this.month+i;
-      month.year=this.year;
-      monthList.push(month);
-    }
-    this.monthList=monthList;
+      var thisYear=this.today.getFullYear();
+      var thisMonth=this.today.getMonth()+1;
+      var thisDate=this.today.getDate();
+      function Month() {
+        
+      };
+      Month.prototype={
+        date:thisDate
+      };
+      var monthList=[];
+      for(var i=-2;i<=2;i++){
+        var month=new Month();
+        month.month=thisMonth+i;
+        month.year=thisYear;
+        monthList.push(month);
+      }
+      this.monthList=monthList;
   },
   components:{
     'tab':tab,
@@ -75,6 +72,11 @@ export default {
     'carousel':carousel,
     'slide':slide,
     'calendar':calendar
+  },
+  watch:{
+    'today':function (val,old) {
+      // console.info(old.getMonth()+"->"+val.getMonth());
+    }
   },
   computed:{
     'tabItem':function () {
@@ -92,15 +94,37 @@ export default {
   },
   methods:{
     'onSwipeEnd':function (index) {
+      var activeMonth=this.monthList[this.activeIndex];
       this.activeIndex=index;
       var month=this.monthList[index];
-      this.month=month.month;
-      this.date=month.date;
+      var date={
+        year:month.year,
+        month:month.month,
+        date:activeMonth.date
+      };
+      this.monthList.splice(this.activeIndex,1,date);
     },
     'onItemClick':function (value) {
-        this.activeIndex=this.activeIndex+value.month-this.month;
-        this.month=value.month;
-        this.date=value.date;
+      var thisMonth=this.today.getMonth()+1;
+      var changed=value.month-thisMonth;
+      this.activeIndex=this.activeIndex+changed;
+      var activeMonth=this.monthList[this.activeIndex];
+      var date;
+      if(changed===0){
+        date={
+            year:value.year,
+            month:value.month,
+            date:value.date
+        }
+      }
+      else{
+        date={
+            year:activeMonth.year,
+            month:activeMonth.month,
+            date:value.date
+        }
+      }
+      this.monthList.splice(this.activeIndex,1,date);
     }
   }
 }

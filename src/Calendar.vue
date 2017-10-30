@@ -29,15 +29,17 @@ export default {
             type: Function,
             default:function(){
                 return function(value) {
-                    this.thisDate=value.date;
-                }
+                    this.date={
+                        year:value.year,
+                        month:value.month,
+                        date:value.date
+                    };
+                };
             }
         }
     },
     data(){
         return {
-            year:this.date.year,
-            month:this.date.month,
             thisDate:1,
             header:['日','一','二','三','四','五','六'],
             rows:[],
@@ -48,12 +50,14 @@ export default {
         };
     },
     created:function(){
-        this.factor=this.factorOfMonth(this.year,this.month);//当前月的因子
-        this.lastFactor=this.factorOfMonth(this.year,this.month-1);//上月的因子
+        var thisYear=this.date.year;
+        var thisMonth=this.date.month;
+        this.factor=this.factorOfMonth(thisYear,thisMonth);//当前月的因子
+        this.lastFactor=this.factorOfMonth(thisYear,thisMonth-1);//上月的因子
 
-        this.Last=this.createItem(this.year,this.month-1,this.invalidStyle);
-        this.This=this.createItem(this.year,this.month,this.style);
-        this.Next=this.createItem(this.year,this.month+1,this.invalidStyle);
+        this.Last=this.createItem(thisYear,thisMonth-1,this.invalidStyle);
+        this.This=this.createItem(thisYear,thisMonth,this.style);
+        this.Next=this.createItem(thisYear,thisMonth+1,this.invalidStyle);
         this.rows=this.generateRows();
         if(this.factor.isInCurrentMonth){
             var today=new Date().getDate();
@@ -62,29 +66,31 @@ export default {
                 return item;
             },today);
         }
-        this.thisDate=this.date.date;
+        var activeStyle=this.activeStyle;
+        this.handleItem(function(item){
+            item.style=activeStyle;
+            return item;
+        },this.date.date);
     },
     components:{
         'mTable':table
     },
     watch:{
-        'date':function () {
-            this.year=this.date.year;
-            this.month=this.date.month;
-            this.thisDate=this.date.date;
-        },
-        'thisDate':function(val,old){
+        'date':function(val,old){
+            console.info(val.year+"-"+val.month+"-"+val.date);
+            var newDate=val.date;
+            var oldDate=old.date;
             var style=this.style;
             var activeStyle=this.activeStyle;
             var todayStyle=this.todayStyle;
             this.handleItem(function(item){
                 item.style=activeStyle;
                 return item;
-            },val);
+            },newDate);
             this.handleItem(function(item){
                 item.style=item.today?todayStyle:style;
                 return item;
-            },old);
+            },oldDate);
         }
     },
     methods:{
