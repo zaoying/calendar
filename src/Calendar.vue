@@ -11,13 +11,14 @@
 </template>
 <script>
 import table from './Table.vue';
+import factorOfMonth from './util.js';
 export default {
     name:'calendar',
     props:{
         'date':{
             type:Object,
             default:function () {
-                var date=new Date()
+                var date=new Date();
                 return {
                     year:date.getFullYear(),
                     month:date.getMonth()+1,
@@ -52,8 +53,8 @@ export default {
     created:function(){
         var thisYear=this.date.year;
         var thisMonth=this.date.month;
-        this.factor=this.factorOfMonth(thisYear,thisMonth);//当前月的因子
-        this.lastFactor=this.factorOfMonth(thisYear,thisMonth-1);//上月的因子
+        this.factor=factorOfMonth(thisYear,thisMonth);//当前月的因子
+        this.lastFactor=factorOfMonth(thisYear,thisMonth-1);//上月的因子
 
         this.Last=this.createItem(thisYear,thisMonth-1,this.invalidStyle);
         this.This=this.createItem(thisYear,thisMonth,this.style);
@@ -129,37 +130,6 @@ export default {
                     this.rows.splice(r,1,row);
                 }
             }
-        },
-        'factorOfMonth':function(year,month){
-            var length;//当前月份有多少天
-            if(month===2){
-                if(year%400===0||(year%4===0&&year%100!==0)){
-                length = 29;
-                }
-                else length = 28;
-            }
-            else if(month===4||month===6||month===9||month===11){
-                length = 30;
-            }
-            else length = 31;
-
-            var now = new Date();
-            var _year = now.getFullYear();
-            var _month = now.getMonth()+1;
-            // var _date = now.getDate();
-            var isInCurrentMonth=_year===year&&_month===month;//是否在当前月份
-
-            now.setFullYear(year);
-            now.setMonth(month-1);//0表示一月，所以需要减去一
-            now.setDate(1);
-            var firstDayOfMonth=now.getDay();//当前月份第一天是星期几,0表示星期日
-            var lastDayOfMonth=(length+firstDayOfMonth)%7;//当前月份最后一天是星期几
-            return {
-                isInCurrentMonth:isInCurrentMonth,
-                length:length,
-                firstDayOfMonth:firstDayOfMonth,
-                lastDayOfMonth:lastDayOfMonth
-            };
         },
         'generateRows':function () {
             var Last=this.Last;

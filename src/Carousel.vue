@@ -17,7 +17,7 @@ export default {
             style:{
                 transform:'translateX(0)'
             }
-        }
+        };
     },
     mounted:function () {
         this.childrenNum=this.$children.length;
@@ -44,7 +44,7 @@ export default {
         'translateX':function (val,old) {
             this.style={
                 transform:"translateX("+(0-this.translateX)+"px)"
-            }
+            };
         }
     },
     methods:{

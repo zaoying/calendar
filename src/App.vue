@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import tab from './Tab.vue'
-import table from './Table.vue'
-import carousel from './Carousel.vue'
-import slide from './Slide.vue'
-import calendar from './Calendar.vue'
+import tab from './Tab.vue';
+import table from './Table.vue';
+import carousel from './Carousel.vue';
+import slide from './Slide.vue';
+import calendar from './Calendar.vue';
 export default {
   name: 'app',
   data () {
@@ -45,7 +45,7 @@ export default {
           repeat:'每天',
           level:1
         }]
-    }
+    };
   },
   created:function () {
       var thisYear=this.today.getFullYear();
@@ -53,7 +53,7 @@ export default {
       var thisDate=this.today.getDate();
       function Month() {
         
-      };
+      }
       Month.prototype={
         date:thisDate
       };
@@ -115,14 +115,14 @@ export default {
             year:value.year,
             month:value.month,
             date:value.date
-        }
+        };
       }
       else{
         date={
             year:activeMonth.year,
             month:activeMonth.month,
             date:value.date
-        }
+        };
       }
       this.monthList.splice(this.activeIndex,1,date);
     }
