@@ -16,32 +16,26 @@ export default {
     name:'calendar',
     props:{
         'date':{
-            type:Object,
+            type:Date,
             default:function () {
-                var date=new Date();
-                return {
-                    year:date.getFullYear(),
-                    month:date.getMonth()+1,
-                    date:date.getDate()
-                };
+                return new Date();
             }
         },
         'itemClick':{
             type: Function,
             default:function(){
                 return function(value) {
-                    this.date={
-                        year:value.year,
-                        month:value.month,
-                        date:value.date
-                    };
+                    var date=new Date();
+                    date.setYear(value.year);
+                    date.setMonth(value.month-1);
+                    date.setDate(value.date);
+                    this.date=date;
                 };
             }
         }
     },
     data(){
         return {
-            thisDate:1,
             header:['日','一','二','三','四','五','六'],
             rows:[],
             style:{'item':true},
@@ -51,10 +45,11 @@ export default {
         };
     },
     created:function(){
-        var thisYear=this.date.year;
-        var thisMonth=this.date.month;
-        this.factor=factorOfMonth(thisYear,thisMonth);//当前月的因子
+        var thisYear=this.date.getFullYear();
+        var thisMonth=this.date.getMonth()+1;
         this.lastFactor=factorOfMonth(thisYear,thisMonth-1);//上月的因子
+        this.factor=factorOfMonth(thisYear,thisMonth);//当前月的因子
+        this.nextFactor=factorOfMonth(thisYear,thisMonth+1);//上月的因子
 
         this.Last=this.createItem(thisYear,thisMonth-1,this.invalidStyle);
         this.This=this.createItem(thisYear,thisMonth,this.style);
@@ -71,7 +66,7 @@ export default {
         this.handleItem(function(item){
             item.style=activeStyle;
             return item;
-        },this.date.date);
+        },this.date.getDate());
     },
     components:{
         'mTable':table

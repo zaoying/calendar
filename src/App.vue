@@ -2,7 +2,7 @@
   <div class="app">
     <tab :tabItem="tabItem"></tab>
     <carousel :initIndex="activeIndex" :swipeEnd="onSwipeEnd">
-      <slide v-for="month in monthList" :key="month.month" style="vertical-align:top">
+      <slide v-for="month in monthList" :key="month.getMonth()" style="vertical-align:top">
         <calendar :itemClick="onItemClick" :date="month"></calendar>
       </slide>
     </carousel>
@@ -49,20 +49,14 @@ export default {
   },
   created:function () {
       var thisYear=this.today.getFullYear();
-      var thisMonth=this.today.getMonth()+1;
+      var thisMonth=this.today.getMonth();
       var thisDate=this.today.getDate();
-      function Month() {
-        
-      }
-      Month.prototype={
-        date:thisDate
-      };
       var monthList=[];
       for(var i=-2;i<=2;i++){
-        var month=new Month();
-        month.month=thisMonth+i;
-        month.year=thisYear;
-        monthList.push(month);
+        var date=new Date();
+        date.setYear(thisYear);
+        date.setMonth(thisMonth+i);
+        monthList.push(date);
       }
       this.monthList=monthList;
   },
@@ -83,7 +77,7 @@ export default {
       var tabItem=[];
       var length=this.monthList.length;
       for(var i=0;i<length;i++){
-        var month=this.monthList[i].month;
+        var month=this.monthList[i].getMonth()+1;
         tabItem.push({
           text:month,
           active:i===this.activeIndex
@@ -97,11 +91,10 @@ export default {
       var activeMonth=this.monthList[this.activeIndex];
       this.activeIndex=index;
       var month=this.monthList[index];
-      var date={
-        year:month.year,
-        month:month.month,
-        date:activeMonth.date
-      };
+      var date=new Date();
+      date.setYear(month.getFullYear());
+      date.setMonth(month.getMonth());
+      date.setDate(month.getDate());
       this.monthList.splice(this.activeIndex,1,date);
     },
     'onItemClick':function (value) {
@@ -109,20 +102,16 @@ export default {
       var changed=value.month-thisMonth;
       this.activeIndex=this.activeIndex+changed;
       var activeMonth=this.monthList[this.activeIndex];
-      var date;
+      var date=new Date();
       if(changed===0){
-        date={
-            year:value.year,
-            month:value.month,
-            date:value.date
-        };
+        date.setYear(value.year);
+        date.setMonth(value.month);
+        date.setDate(value.date);
       }
       else{
-        date={
-            year:activeMonth.year,
-            month:activeMonth.month,
-            date:value.date
-        };
+        date.setYear(activeMonth.year);
+        date.setMonth(activeMonth.month);
+        date.setDate(value.date);
       }
       this.monthList.splice(this.activeIndex,1,date);
     }
