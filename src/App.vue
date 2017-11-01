@@ -94,8 +94,11 @@ export default {
       var date=new Date();
       date.setYear(month.getFullYear());
       date.setMonth(month.getMonth());
-      date.setDate(month.getDate());
+      date.setDate(activeMonth.getDate());
       this.monthList.splice(this.activeIndex,1,date);
+    },
+    'generateMonth':function(year,month){
+
     },
     'onItemClick':function (value) {
       var thisMonth=this.today.getMonth()+1;
@@ -105,12 +108,12 @@ export default {
       var date=new Date();
       if(changed===0){
         date.setYear(value.year);
-        date.setMonth(value.month);
+        date.setMonth(value.month-1);
         date.setDate(value.date);
       }
       else{
-        date.setYear(activeMonth.year);
-        date.setMonth(activeMonth.month);
+        date.setYear(activeMonth.getFullYear());
+        date.setMonth(activeMonth.getMonth());
         date.setDate(value.date);
       }
       this.monthList.splice(this.activeIndex,1,date);

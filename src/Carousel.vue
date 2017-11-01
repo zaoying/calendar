@@ -62,7 +62,6 @@ export default {
         'touchEnd':function (event) {
             this.endX=event.changedTouches[0].pageX;
             var distance=this.endX-this.startX;
-            console.info("distance:"+distance);
             if(distance>=this.slideWidth/2){
                 this.slideTo(this.activeIndex-1);
             }

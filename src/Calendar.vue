@@ -73,9 +73,8 @@ export default {
     },
     watch:{
         'date':function(val,old){
-            console.info(val.year+"-"+val.month+"-"+val.date);
-            var newDate=val.date;
-            var oldDate=old.date;
+            var newDate=val.getDate();
+            var oldDate=old.getDate();
             var style=this.style;
             var activeStyle=this.activeStyle;
             var todayStyle=this.todayStyle;
