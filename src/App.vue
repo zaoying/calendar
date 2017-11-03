@@ -89,37 +89,39 @@ export default {
   methods:{
     'onSwipeEnd':function (index) {
       var activeMonth=this.monthList[this.activeIndex];
-      this.activeIndex=index;
       var month=this.monthList[index];
       var date=new Date();
       date.setYear(month.getFullYear());
       date.setMonth(month.getMonth());
       date.setDate(activeMonth.getDate());
-      this.monthList.splice(this.activeIndex,1,date);
+      this.monthList.splice(index,1,date);
+      this.activeIndex=index;
     },
     'generateMonth':function(year,month){
 
     },
     'onItemClick':function (value) {
-      var thisMonth=this.today.getMonth()+1;
-      var changed=value.month-thisMonth;
-      this.activeIndex=this.activeIndex+changed;
       var activeMonth=this.monthList[this.activeIndex];
+      var oldMonth=activeMonth.getMonth();
+      var newMonth=value.month-1;
+      var changed=newMonth-oldMonth;
+      var newIndex=this.activeIndex+changed;
       var date=new Date();
       if(changed===0){
         date.setYear(value.year);
-        date.setMonth(value.month-1);
+        date.setMonth(oldMonth);
         date.setDate(value.date);
       }
       else{
         date.setYear(activeMonth.getFullYear());
-        date.setMonth(activeMonth.getMonth());
+        date.setMonth(newMonth);
         date.setDate(value.date);
       }
-      this.monthList.splice(this.activeIndex,1,date);
+      this.monthList.splice(newIndex,1,date);
+      this.activeIndex=newIndex;
     }
   }
-}
+};
 </script>
 <style scoped>
   .app{

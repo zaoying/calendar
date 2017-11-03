@@ -13,7 +13,6 @@ export default {
         return {
             translateX:0,
             activeIndex:this.initIndex,
-            isAnimate:true,
             style:{
                 transform:'translateX(0)'
             }
@@ -33,7 +32,7 @@ export default {
             type:Function,
             default:function () {
                 return function (index) {
-                }
+                };
             }
         }
     },
@@ -90,10 +89,11 @@ export default {
         overflow: hidden;
         white-space: nowrap;
     }
-    .animate{
-        -webkit-transition: translate 5s ease;
-        -moz-transition: translate 5 ease;
-        transition: translate 5s ease;
+    .container .wrapper{
+        transform: translateX(0);
+        -webkit-transition: all 500ms ease;
+        -moz-transition: all 500ms ease;
+        transition: all 500ms ease;
     }
     .wrapper .slide{
         display:inline-block;

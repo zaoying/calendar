@@ -49,7 +49,6 @@ export default {
         var thisMonth=this.date.getMonth()+1;
         this.lastFactor=factorOfMonth(thisYear,thisMonth-1);//上月的因子
         this.factor=factorOfMonth(thisYear,thisMonth);//当前月的因子
-        this.nextFactor=factorOfMonth(thisYear,thisMonth+1);//上月的因子
 
         this.Last=this.createItem(thisYear,thisMonth-1,this.invalidStyle);
         this.This=this.createItem(thisYear,thisMonth,this.style);
@@ -63,10 +62,12 @@ export default {
             },today);
         }
         var activeStyle=this.activeStyle;
+        var date=this.date.getDate();
+        // if(date>this.factor.length)date=this.factor.length;
         this.handleItem(function(item){
             item.style=activeStyle;
             return item;
-        },this.date.getDate());
+        },date);
     },
     components:{
         'mTable':table
@@ -74,18 +75,19 @@ export default {
     watch:{
         'date':function(val,old){
             var newDate=val.getDate();
+            // if(newDate>this.factor.length)newDate=this.factor.length;
             var oldDate=old.getDate();
             var style=this.style;
             var activeStyle=this.activeStyle;
             var todayStyle=this.todayStyle;
             this.handleItem(function(item){
-                item.style=activeStyle;
-                return item;
-            },newDate);
-            this.handleItem(function(item){
                 item.style=item.today?todayStyle:style;
                 return item;
             },oldDate);
+            this.handleItem(function(item){
+                item.style=activeStyle;
+                return item;
+            },newDate);
         }
     },
     methods:{
