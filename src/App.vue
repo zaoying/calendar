@@ -101,6 +101,7 @@ export default {
 
     },
     'onItemClick':function (value) {
+      console.info(value);
       var activeMonth=this.monthList[this.activeIndex];
       var oldMonth=activeMonth.getMonth();
       var newMonth=value.month-1;

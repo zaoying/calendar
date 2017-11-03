@@ -1,4 +1,7 @@
-function factorOfMonth(year,month){
+function factorOfMonth(realYear,realMonth){
+    var month=realMonth-1;
+    var year=realYear+Math.floor(month%12);
+    month=month%12+1;
     var length;//当前月份有多少天
     if(month===2){
         if(year%400===0||(year%4===0&&year%100!==0)){
