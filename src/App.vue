@@ -2,7 +2,7 @@
   <div class="app">
     <tab :tabItem="tabItem"></tab>
     <carousel :initIndex="activeIndex" :swipeEnd="onSwipeEnd">
-      <slide v-for="month in monthList" :key="month.getMonth()" style="vertical-align:top">
+      <slide v-for="month in monthList" :key="month.getMonth()" style="vertical-align:top;">
         <calendar :itemClick="onItemClick" :date="month"></calendar>
       </slide>
     </carousel>

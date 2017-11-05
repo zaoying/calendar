@@ -18,10 +18,14 @@ export default {
             }
         };
     },
-    updated:function () {
+    mounted:function () {
         this.childrenNum=this.$children.length;
         this.slideWidth=this.$el.clientWidth;
         this.slideTo(this.activeIndex);
+    },
+    updated:function () {
+        this.childrenNum=this.$children.length;
+        this.slideWidth=this.$el.clientWidth;
     },
     props:{
         'initIndex':{
