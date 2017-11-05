@@ -1,6 +1,10 @@
 <template>
     <div class="tab">
-        <div v-bind:class="[{item:true},{active:item.active}]" v-for="item in tabItem">{{item.text}}</div>
+        <div v-for="item in tabItem">
+            <slot>
+                <a v-bind:class="[{item:true},{active:item.active}]">{{item.text}}</a>
+            </slot>
+        </div>
     </div>
 </template>
 <script>
@@ -17,9 +21,14 @@
         justify-content:space-around;
         align-items:flex-start;
         padding:2% 1%;
+        overflow-x:scroll;
+    }
+    .tab>div{
+        flex: 0 0 20%;
+        display:inline-block;
+        text-align:center;
     }
     .tab .item{
-        flex: 0 1 auto;
         display:inline-block;
         color:grey;
         line-height: 2em;

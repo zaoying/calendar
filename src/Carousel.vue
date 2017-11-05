@@ -18,7 +18,7 @@ export default {
             }
         };
     },
-    mounted:function () {
+    updated:function () {
         this.childrenNum=this.$children.length;
         this.slideWidth=this.$el.clientWidth;
         this.slideTo(this.activeIndex);

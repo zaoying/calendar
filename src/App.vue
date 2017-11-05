@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import {lengthOfMonth} from './util.js';
 import tab from './Tab.vue';
 import table from './Table.vue';
 import carousel from './Carousel.vue';
@@ -20,9 +21,9 @@ export default {
   name: 'app',
   data () {
     return {
-      today:new Date(),
-      monthList:[],
+      activeDate:1,
       activeIndex:2,
+      monthList:[],
       todoList:[{
           no:'001',
           start:'09:00:00',
@@ -48,14 +49,14 @@ export default {
     };
   },
   created:function () {
-      var thisYear=this.today.getFullYear();
-      var thisMonth=this.today.getMonth();
-      var thisDate=this.today.getDate();
+      var today=new Date();
+      var thisYear=today.getFullYear();
+      var thisMonth=today.getMonth();
+      var thisDate=today.getDate();
+      this.activeDate=thisDate;
       var monthList=[];
       for(var i=-2;i<=2;i++){
-        var date=new Date();
-        date.setYear(thisYear);
-        date.setMonth(thisMonth+i);
+        var date=this.generateDate(thisYear,thisMonth+i,thisDate);
         monthList.push(date);
       }
       this.monthList=monthList;
@@ -68,8 +69,34 @@ export default {
     'calendar':calendar
   },
   watch:{
-    'today':function (val,old) {
-      // console.info(old.getMonth()+"->"+val.getMonth());
+    'activeIndex':function (val,old) {
+      var oldMonth=this.monthList[old];
+      var newMonth=this.monthList[val];
+      var lastIndex=this.monthList.length-1;
+      var date=this.generateDate(
+        newMonth.getFullYear(),
+        newMonth.getMonth(),
+        this.activeDate
+      );
+      if(val===0){
+        var last=this.generateDate(
+          newMonth.getFullYear(),
+          newMonth.getMonth()-1,
+          this.activeDate
+        );
+        this.monthList.splice(val,1,last,date);
+      }
+      else if(val===lastIndex){
+        var next=this.generateDate(
+          newMonth.getFullYear(),
+          newMonth.getMonth()+1,
+          this.activeDate
+        );
+        this.monthList.splice(val,1,date,next);
+      }
+      else{
+        this.monthList.splice(val,1,date);
+      }
     }
   },
   computed:{
@@ -87,39 +114,25 @@ export default {
     }
   },
   methods:{
+    'generateDate':function(year,month,date){
+      var length=lengthOfMonth(year,month+1,date);
+      var _date=new Date();
+      _date.setYear(year);
+      _date.setMonth(month);
+      _date.setDate(date>length?length:date);
+      return _date;
+    },
     'onSwipeEnd':function (index) {
-      var activeMonth=this.monthList[this.activeIndex];
-      var month=this.monthList[index];
-      var date=new Date();
-      date.setYear(month.getFullYear());
-      date.setMonth(month.getMonth());
-      date.setDate(activeMonth.getDate());
-      this.monthList.splice(index,1,date);
       this.activeIndex=index;
     },
-    'generateMonth':function(year,month){
-
-    },
     'onItemClick':function (value) {
-      console.info(value);
+      this.activeDate=value.date;
+
       var activeMonth=this.monthList[this.activeIndex];
       var oldMonth=activeMonth.getMonth();
       var newMonth=value.month-1;
       var changed=newMonth-oldMonth;
-      var newIndex=this.activeIndex+changed;
-      var date=new Date();
-      if(changed===0){
-        date.setYear(value.year);
-        date.setMonth(oldMonth);
-        date.setDate(value.date);
-      }
-      else{
-        date.setYear(activeMonth.getFullYear());
-        date.setMonth(newMonth);
-        date.setDate(value.date);
-      }
-      this.monthList.splice(newIndex,1,date);
-      this.activeIndex=newIndex;
+      this.activeIndex=this.activeIndex+changed;
     }
   }
 };
