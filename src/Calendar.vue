@@ -104,10 +104,11 @@ export default {
             return Item;
         },
         'handleItem':function(callback,rowNum,colNum){
+            var row,item,muteItem;
             if(colNum){
-                var row=this.rows[rowNum];
-                var item=row?row[colNum]:null;//ToDo 深拷贝防止修改
-                var muteItem=callback(item);
+                row=this.rows[rowNum];
+                item=row?row[colNum]:null;//ToDo 深拷贝防止修改
+                muteItem=callback(item);
                 if(muteItem){
                     row.splice(colNum,1,muteItem);
                     this.rows.splice(rowNum,1,row);
@@ -118,9 +119,9 @@ export default {
                 var r=Math.floor(position/7);
                 var c=position%7;
 
-                var row=this.rows[r];
-                var item=row?row[c]:null;//ToDo 深拷贝防止修改
-                var muteItem=callback(item);
+                row=this.rows[r];
+                item=row?row[c]:null;//ToDo 深拷贝防止修改
+                muteItem=callback(item);
                 if(muteItem){
                     row.splice(c,1,muteItem);
                     this.rows.splice(r,1,row);

@@ -69,8 +69,15 @@ export default {
     'calendar':calendar
   },
   watch:{
+    'activeDate':function(val,old){
+      var activeDate=this.monthList[this.activeIndex];
+      var date=new Date();
+      date.setYear(activeDate.getFullYear());
+      date.setDate(activeDate.getMonth());
+      date.setDate(val);
+      this.monthList.splice(this.activeIndex,1,date);
+    },
     'activeIndex':function (val,old) {
-      var oldMonth=this.monthList[old];
       var newMonth=this.monthList[val];
       var lastIndex=this.monthList.length-1;
       var date=this.generateDate(
