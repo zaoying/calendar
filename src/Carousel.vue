@@ -46,7 +46,7 @@ export default {
         },
         'translateX':function (val,old) {
             this.style={
-                transform:"translateX("+(0-this.translateX)+"px)"
+                transform:'translateX('+(0-this.translateX)+'px)'
             };
         }
     },
@@ -74,7 +74,6 @@ export default {
             else this.slideTo(this.activeIndex);
         },
         'touchCancel':function (event) {
-            console.info('滑动取消');
             this.slideTo(this.activeIndex);
         },
         'slideTo':function(slideIndex) {

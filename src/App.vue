@@ -71,10 +71,11 @@ export default {
   watch:{
     'activeDate':function(val,old){
       var activeDate=this.monthList[this.activeIndex];
-      var date=new Date();
-      date.setYear(activeDate.getFullYear());
-      date.setDate(activeDate.getMonth());
-      date.setDate(val);
+      var date=this.generateDate(
+        activeDate.getFullYear(),
+        activeDate.getMonth(),
+        val
+      );
       this.monthList.splice(this.activeIndex,1,date);
     },
     'activeIndex':function (val,old) {
@@ -85,13 +86,14 @@ export default {
         newMonth.getMonth(),
         this.activeDate
       );
+      this.monthList.splice(val,1,date);
       if(val===0){
         var last=this.generateDate(
           newMonth.getFullYear(),
           newMonth.getMonth()-1,
           this.activeDate
         );
-        this.monthList.splice(val,1,last,date);
+        this.monthList.unshift(last);
       }
       else if(val===lastIndex){
         var next=this.generateDate(
@@ -99,10 +101,7 @@ export default {
           newMonth.getMonth()+1,
           this.activeDate
         );
-        this.monthList.splice(val,1,date,next);
-      }
-      else{
-        this.monthList.splice(val,1,date);
+        this.monthList.push(next);
       }
     }
   },
