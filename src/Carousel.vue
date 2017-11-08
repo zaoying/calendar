@@ -36,6 +36,7 @@ export default {
             type:Function,
             default:function () {
                 return function (index) {
+                    this.activeIndex=index;
                 };
             }
         }
