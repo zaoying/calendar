@@ -43,6 +43,7 @@ export default {
     },
     watch:{
         'initIndex':function (val,old) {
+            console.info('initIndex:'+val);
             this.slideTo(val);
         },
         'translateX':function (val,old) {
@@ -94,14 +95,19 @@ export default {
         white-space: nowrap;
     }
     .container .wrapper{
+        position: relative;
         transform: translateX(0);
-        -webkit-transition: all 500ms ease;
-        -moz-transition: all 500ms ease;
-        transition: all 500ms ease;
+        -webkit-transition: transform 500ms ease;
+        -moz-transition: transform 500ms ease;
+        transition: transform 500ms ease;
     }
     .wrapper .slide{
+        position: absolute;
+        z-index: 9;
         display:inline-block;
-        min-width: 100%;
+        top:0;
+        height: 100%;
+        width: 100%;
     }
 </style>
 

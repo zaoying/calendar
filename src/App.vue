@@ -2,7 +2,7 @@
   <div class="app">
     <tab :tabItem="tabItem"></tab>
     <carousel :initIndex="activeIndex" :swipeEnd="onSwipeEnd">
-      <slide v-for="month in monthList" :key="month.getMonth()" style="vertical-align:top;">
+      <slide v-for="(month,index) in monthList" :key="index" :position="index-activeIndex">
         <calendar :itemClick="onItemClick" :date="month"></calendar>
       </slide>
     </carousel>
@@ -93,6 +93,10 @@ export default {
           newMonth.getMonth()-1,
           this.activeDate
         );
+        // var vm=this;
+        // this.$nextTick(function(){
+        //   vm.activeIndex=1;
+        // });
         this.monthList.unshift(last);
       }
       else if(val===lastIndex){
