@@ -1,12 +1,10 @@
 <template>
     <mTable :rows="rows" :header="header">
-        <tr slot="row" slot-scope="props">
-            <td :key="key" v-for="(value,key) in props.header">
-                <a v-bind:class="props.row[key].style" @click="onCellClick(props.rowId,key,props.row[key])">
-                    {{props.row[key].date}}
-                </a>
-            </td>
-        </tr>
+        <td slot="cell" slot-scope="props" v-for="(value,key) in props.header" :key="key">
+            <a v-bind:class="props.row[key].style" @click="onCellClick(props.rowId,key,props.row[key])">
+                {{props.row[key].date}}
+            </a>
+        </td>
     </mTable>
 </template>
 <script>

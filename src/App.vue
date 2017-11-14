@@ -1,8 +1,10 @@
 <template>
   <div class="app">
-    <tab :tabItem="tabItem"></tab>
+    <tab :tabItem="tabItem">
+        <a slot="tab" slot-scope="props" v-bind:class="[{item:true},{active:props.item.active}]">{{props.item.month}}</a>
+    </tab>
     <carousel :initIndex="activeIndex" :swipeEnd="onSwipeEnd">
-      <slide v-for="(month,index) in monthList" :key="index" :position="index-activeIndex">
+      <slide v-for="(month,index) in monthList" :key="index" :position="index-offset">
         <calendar :itemClick="onItemClick" :date="month"></calendar>
       </slide>
     </carousel>
@@ -22,8 +24,9 @@ export default {
   data () {
     return {
       activeDate:1,
-      activeIndex:2,
-      monthList:[],
+      activeIndex:0,
+      offset:2,
+      tabItem:[],
       todoList:[{
           no:'001',
           start:'09:00:00',
@@ -50,16 +53,19 @@ export default {
   },
   created:function () {
       var today=new Date();
-      var thisYear=today.getFullYear();
-      var thisMonth=today.getMonth();
-      var thisDate=today.getDate();
-      this.activeDate=thisDate;
-      var monthList=[];
-      for(var i=-2;i<=2;i++){
-        var date=this.generateDate(thisYear,thisMonth+i,thisDate);
-        monthList.push(date);
+      var thisMonth=today.getMonth()+1;
+      this.activeYear=today.getFullYear();
+      this.activeDate=today.getDate();
+      var tabItem=[];
+      var offset=this.offset;
+      for(var i=-offset;i<=offset;i++){
+        tabItem.push({
+          index:i,
+          active:i===this.activeIndex,
+          month:thisMonth+i
+        });
       }
-      this.monthList=monthList;
+      this.tabItem=tabItem;
   },
   components:{
     'tab':tab,
@@ -70,57 +76,56 @@ export default {
   },
   watch:{
     'activeDate':function(val,old){
-      var activeDate=this.monthList[this.activeIndex];
+      var realIndex=this.activeIndex+this.offset;
+      var activeDate=this.monthList[realIndex];
       var date=this.generateDate(
         activeDate.getFullYear(),
         activeDate.getMonth(),
         val
       );
-      this.monthList.splice(this.activeIndex,1,date);
+      this.monthList.splice(realIndex,1,date);
     },
     'activeIndex':function (val,old) {
-      var newMonth=this.monthList[val];
-      var lastIndex=this.monthList.length-1;
-      var date=this.generateDate(
-        newMonth.getFullYear(),
-        newMonth.getMonth(),
-        this.activeDate
-      );
-      this.monthList.splice(val,1,date);
-      if(val===0){
-        var last=this.generateDate(
-          newMonth.getFullYear(),
-          newMonth.getMonth()-1,
-          this.activeDate
-        );
-        // var vm=this;
-        // this.$nextTick(function(){
-        //   vm.activeIndex=1;
-        // });
-        this.monthList.unshift(last);
-      }
-      else if(val===lastIndex){
-        var next=this.generateDate(
-          newMonth.getFullYear(),
-          newMonth.getMonth()+1,
-          this.activeDate
-        );
-        this.monthList.push(next);
-      }
+      var oldIndex=val+this.offset;
+      var newIndex=old+this.offset;
+      var oldTab=this.tabItem[oldIndex];
+      oldTab.active=false;
+      var newTab=this.tabItem[newIndex];
+      newTab.active=true;
+      // var newTab={
+      //   index:oldTab.index,
+      //   month:oldTab.month,
+      //   active:true
+      // };
+      this.tabItem.splice(oldIndex,1,oldTab);
+      this.tabItem.splice(newIndex,1,newTab);
+      // if(val===0){
+      //   var last=this.generateDate(
+      //     newMonth.getFullYear(),
+      //     newMonth.getMonth()-1,
+      //     this.activeDate
+      //   );
+      //   this.monthList.unshift(last);
+      // }
+      // else if(val===lastIndex){
+      //   var next=this.generateDate(
+      //     newMonth.getFullYear(),
+      //     newMonth.getMonth()+1,
+      //     this.activeDate
+      //   );
+      //   this.monthList.push(next);
+      // }
     }
   },
   computed:{
-    'tabItem':function () {
-      var tabItem=[];
-      var length=this.monthList.length;
-      for(var i=0;i<length;i++){
-        var month=this.monthList[i].getMonth()+1;
-        tabItem.push({
-          text:month,
-          active:i===this.activeIndex
-        });
+    'monthList':function () {
+      var monthList=[];
+      for(var index in this.tabItem){
+        var tab=this.tabItem[index];
+        var date=this.generateDate(this.activeYear,tab.month-1,this.activeDate);
+        monthList.push(date);
       }
-      return tabItem;
+      return monthList;
     }
   },
   methods:{
@@ -153,5 +158,8 @@ export default {
     display:-webkit-flex;
     flex-flow: column nowrap;
     height:100%;
+  }
+  .container{
+    height: 20em;
   }
 </style>

@@ -2,17 +2,17 @@
     <table class="table">
         <thead v-if="showHead">
             <tr>
-                <slot name="header" :val="value" :headId="key" v-for="(value,key) in header">
-                    <th>{{value}}</th>
-                </slot>
+                <th v-for="(value,key) in header" :key="key">
+                    <slot name="header" :val="value" :headId="key">{{value}}</slot>
+                </th>
             </tr>
         </thead>
         <tbody>
-            <slot name="row" :rowId="rowId" :row="row" :header="header" v-for="(row,rowId) in rows">
-                <tr :key="rowId" v-for="(row,rowId) in rows">
-                    <td :key="key" v-for="(value,key) in header">{{row[key]}}</td>
-                </tr>
-            </slot>
+            <tr v-for="(row,rowId) in rows" :key="rowId">
+                <slot name="cell" :rowId="rowId" :row="row" :header="header">
+                    <td v-for="(value,key) in header" :key="key">{{row[key]}}</td>
+                </slot>
+            </tr>
         </tbody>
     </table>
 </template>

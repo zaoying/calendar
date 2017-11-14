@@ -1,7 +1,7 @@
 <template>
     <div class="tab">
-        <div v-for="item in tabItem">
-            <slot>
+        <div v-for="(item,index) in tabItem" :key="index">
+            <slot name="tab" :item="item">
                 <a v-bind:class="[{item:true},{active:item.active}]">{{item.text}}</a>
             </slot>
         </div>
@@ -11,7 +11,7 @@
     export default{
         name:'tab',
         props:['tabItem']
-    }
+    };
 </script>
 <style scoped>
     .tab{

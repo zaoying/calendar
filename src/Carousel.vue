@@ -1,7 +1,7 @@
 <template>
     <div class="container" @touchstart="touchStart($event)" @touchmove="touchMove($event)" 
     @touchend="touchEnd($event)" @touchcancel="touchCancel($event)">
-        <div v-bind:class="['wrapper']" v-bind:style="style">
+        <div class="wrapper" v-bind:style="style">
             <slot></slot>
         </div>
     </div>
@@ -12,7 +12,8 @@ export default {
     data(){
         return {
             translateX:0,
-            activeIndex:this.initIndex,
+            offset:this.initIndex,
+            position:0,
             style:{
                 transform:'translateX(0)'
             }
@@ -21,7 +22,7 @@ export default {
     mounted:function () {
         this.childrenNum=this.$children.length;
         this.slideWidth=this.$el.clientWidth;
-        this.slideTo(this.activeIndex);
+        this.slideTo(this.position);
     },
     updated:function () {
         this.childrenNum=this.$children.length;
@@ -36,15 +37,14 @@ export default {
             type:Function,
             default:function () {
                 return function (index) {
-                    this.activeIndex=index;
+                    this.position=index-this.offset;
                 };
             }
         }
     },
     watch:{
         'initIndex':function (val,old) {
-            console.info('initIndex:'+val);
-            this.slideTo(val);
+            this.slideTo(val-this.offset);
         },
         'translateX':function (val,old) {
             this.style={
@@ -68,22 +68,23 @@ export default {
             this.endX=event.changedTouches[0].pageX;
             var distance=this.endX-this.startX;
             if(distance>=this.slideWidth/2){
-                this.slideTo(this.activeIndex-1);
+                this.slideTo(this.position-1);
             }
             else if(distance<=-this.slideWidth/2){
-                this.slideTo(this.activeIndex+1);
+                this.slideTo(this.position+1);
             }
-            else this.slideTo(this.activeIndex);
+            else this.slideTo(this.position);
         },
         'touchCancel':function (event) {
-            this.slideTo(this.activeIndex);
+            this.slideTo(this.position);
         },
-        'slideTo':function(slideIndex) {
+        'slideTo':function(index) {
+            var slideIndex=index+this.offset;
             if(slideIndex>=0&&slideIndex<this.childrenNum){
-                this.activeIndex=slideIndex;
-                this.swipeEnd(this.activeIndex);
+                this.position=index;
+                this.swipeEnd(slideIndex);
             }
-            this.translateX=this.activeIndex*this.slideWidth;
+            this.translateX=this.position*this.slideWidth;
         }
     }
 };
@@ -96,6 +97,7 @@ export default {
     }
     .container .wrapper{
         position: relative;
+        height: 100%;
         transform: translateX(0);
         -webkit-transition: transform 500ms ease;
         -moz-transition: transform 500ms ease;
