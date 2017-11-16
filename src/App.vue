@@ -90,26 +90,28 @@ export default {
       var newIndex=val+this.offset;
       var oldTab=this.tabItem[oldIndex];
       oldTab.active=false;
+      this.tabItem.splice(oldIndex,1,oldTab);
       var newTab=this.tabItem[newIndex];
       newTab.active=true;
-      this.tabItem.splice(oldIndex,1,oldTab);
       this.tabItem.splice(newIndex,1,newTab);
+      
       var lastIndex=this.tabItem.lenght;
       if(newIndex===0){
-        var last=this.generateDate(
-          newMonth.getFullYear(),
-          newMonth.getMonth()-1,
-          this.activeDate
-        );
+        var last={
+          index:val-1,
+          month:newTab.month-1,
+          active:false
+        };
         this.tabItem.unshift(last);
+        this.offset++;
       }
       else if(newIndex===lastIndex){
-        var next=this.generateDate(
-          newMonth.getFullYear(),
-          newMonth.getMonth()+1,
-          this.activeDate
-        );
-        this.monthList.push(next);
+        var next={
+          index:val+1,
+          month:newTab.month+1,
+          active:false
+        };
+        this.tabItem.push(next);
       }
     }
   },
