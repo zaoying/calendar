@@ -8,11 +8,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(row,rowId) in rows" :key="rowId">
-                <slot name="cell" :rowId="rowId" :row="row" :header="header">
+            <slot :rows="rows" :header="header">
+                <tr v-for="(row,rowId) in rows" :key="rowId">
                     <td v-for="(value,key) in header" :key="key">{{row[key]}}</td>
-                </slot>
-            </tr>
+                </tr>
+            </slot>
         </tbody>
     </table>
 </template>

@@ -86,35 +86,31 @@ export default {
       this.monthList.splice(realIndex,1,date);
     },
     'activeIndex':function (val,old) {
-      var oldIndex=val+this.offset;
-      var newIndex=old+this.offset;
+      var oldIndex=old+this.offset;
+      var newIndex=val+this.offset;
       var oldTab=this.tabItem[oldIndex];
       oldTab.active=false;
       var newTab=this.tabItem[newIndex];
       newTab.active=true;
-      // var newTab={
-      //   index:oldTab.index,
-      //   month:oldTab.month,
-      //   active:true
-      // };
       this.tabItem.splice(oldIndex,1,oldTab);
       this.tabItem.splice(newIndex,1,newTab);
-      // if(val===0){
-      //   var last=this.generateDate(
-      //     newMonth.getFullYear(),
-      //     newMonth.getMonth()-1,
-      //     this.activeDate
-      //   );
-      //   this.monthList.unshift(last);
-      // }
-      // else if(val===lastIndex){
-      //   var next=this.generateDate(
-      //     newMonth.getFullYear(),
-      //     newMonth.getMonth()+1,
-      //     this.activeDate
-      //   );
-      //   this.monthList.push(next);
-      // }
+      var lastIndex=this.tabItem.lenght;
+      if(newIndex===0){
+        var last=this.generateDate(
+          newMonth.getFullYear(),
+          newMonth.getMonth()-1,
+          this.activeDate
+        );
+        this.tabItem.unshift(last);
+      }
+      else if(newIndex===lastIndex){
+        var next=this.generateDate(
+          newMonth.getFullYear(),
+          newMonth.getMonth()+1,
+          this.activeDate
+        );
+        this.monthList.push(next);
+      }
     }
   },
   computed:{
@@ -143,7 +139,8 @@ export default {
     'onItemClick':function (value) {
       this.activeDate=value.date;
 
-      var activeMonth=this.monthList[this.activeIndex];
+      var realIndex=this.activeIndex+this.offset;
+      var activeMonth=this.monthList[realIndex];
       var oldMonth=activeMonth.getMonth();
       var newMonth=value.month-1;
       var changed=newMonth-oldMonth;
@@ -160,6 +157,6 @@ export default {
     height:100%;
   }
   .container{
-    height: 20em;
+    height: 21em;
   }
 </style>

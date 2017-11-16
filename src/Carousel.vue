@@ -12,8 +12,7 @@ export default {
     data(){
         return {
             translateX:0,
-            offset:this.initIndex,
-            position:0,
+            position:this.initIndex,
             style:{
                 transform:'translateX(0)'
             }
@@ -37,14 +36,14 @@ export default {
             type:Function,
             default:function () {
                 return function (index) {
-                    this.position=index-this.offset;
+                    this.position=index;
                 };
             }
         }
     },
     watch:{
         'initIndex':function (val,old) {
-            this.slideTo(val-this.offset);
+            this.slideTo(val);
         },
         'translateX':function (val,old) {
             this.style={
@@ -78,12 +77,11 @@ export default {
         'touchCancel':function (event) {
             this.slideTo(this.position);
         },
-        'slideTo':function(index) {
-            var slideIndex=index+this.offset;
-            if(slideIndex>=0&&slideIndex<this.childrenNum){
-                this.position=index;
-                this.swipeEnd(slideIndex);
-            }
+        'slideTo':function(slideIndex) {
+            // if(slideIndex>=0&&slideIndex<this.childrenNum){
+            // }
+            this.position=slideIndex;
+            this.swipeEnd(slideIndex);
             this.translateX=this.position*this.slideWidth;
         }
     }
