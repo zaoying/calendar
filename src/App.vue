@@ -53,16 +53,22 @@ export default {
   },
   created:function () {
       var today=new Date();
-      var thisMonth=today.getMonth()+1;
-      this.activeYear=today.getFullYear();
+      var thisYear=today.getFullYear();
+      var thisMonth=today.getMonth();
       this.activeDate=today.getDate();
       var tabItem=[];
       var offset=this.offset;
       for(var i=-offset;i<=offset;i++){
+        var date=this.generateDate(
+          thisYear,
+          thisMonth+i,
+          this.activeDate
+        );
         tabItem.push({
           index:i,
           active:i===this.activeIndex,
-          month:thisMonth+i
+          month:date.getMonth()+1,
+          date:date
         });
       }
       this.tabItem=tabItem;
@@ -95,20 +101,32 @@ export default {
       newTab.active=true;
       this.tabItem.splice(newIndex,1,newTab);
       
-      var lastIndex=this.tabItem.lenght;
+      var lastIndex=this.tabItem.length-1;
       if(newIndex===0){
+        var date=this.generateDate(
+          newTab.date.getFullYear(),
+          newTab.month-2,
+          this.activeDate
+        );
         var last={
           index:val-1,
-          month:newTab.month-1,
+          month:date.getMonth()+1,
+          date:date,
           active:false
         };
         this.tabItem.unshift(last);
         this.offset++;
       }
       else if(newIndex===lastIndex){
+        var date=this.generateDate(
+          newTab.date.getFullYear(),
+          newTab.month,
+          this.activeDate
+        );
         var next={
           index:val+1,
-          month:newTab.month+1,
+          month:date.getMonth()+1,
+          date:date,
           active:false
         };
         this.tabItem.push(next);
@@ -120,8 +138,7 @@ export default {
       var monthList=[];
       for(var index in this.tabItem){
         var tab=this.tabItem[index];
-        var date=this.generateDate(this.activeYear,tab.month-1,this.activeDate);
-        monthList.push(date);
+        monthList.push(tab.date);
       }
       return monthList;
     }
