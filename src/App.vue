@@ -4,11 +4,11 @@
         <a slot="tab" slot-scope="props" v-bind:class="[{item:true},{active:props.item.active}]">{{props.item.month}}</a>
     </tab>
     <carousel :initIndex="activeIndex" :swipeEnd="onSwipeEnd">
-      <slide v-for="(month,index) in monthList" :key="index" :position="index-offset">
-        <calendar :itemClick="onItemClick" :date="month"></calendar>
+      <slide v-for="(item,index) in tabItem" :key="item.month" :position="index-offset">
+        <calendar :itemClick="onItemClick" :date="item.date"></calendar>
       </slide>
     </carousel>
-    <mTable :rows="todoList"></mTable>
+    <mTable :header="header" :rows="todoList"></mTable>
   </div>
 </template>
 
@@ -27,6 +27,7 @@ export default {
       activeIndex:0,
       offset:2,
       tabItem:[],
+      header:[],
       todoList:[{
           no:'001',
           start:'09:00:00',
@@ -83,13 +84,15 @@ export default {
   watch:{
     'activeDate':function(val,old){
       var realIndex=this.activeIndex+this.offset;
-      var activeDate=this.monthList[realIndex];
+      var activeItem=this.tabItem[realIndex];
+      var activeDate=activeItem.date;
       var date=this.generateDate(
         activeDate.getFullYear(),
         activeDate.getMonth(),
         val
       );
-      this.monthList.splice(realIndex,1,date);
+      activeItem.date=date;
+      this.tabItem.splice(realIndex,1,activeItem);
     },
     'activeIndex':function (val,old) {
       var oldIndex=old+this.offset;
@@ -99,11 +102,18 @@ export default {
       this.tabItem.splice(oldIndex,1,oldTab);
       var newTab=this.tabItem[newIndex];
       newTab.active=true;
+      var activeDate=newTab.date;
+      newTab.date=this.generateDate(
+          activeDate.getFullYear(),
+          activeDate.getMonth(),
+          this.activeDate
+      );
       this.tabItem.splice(newIndex,1,newTab);
       
       var lastIndex=this.tabItem.length-1;
+      var date;
       if(newIndex===0){
-        var date=this.generateDate(
+        date=this.generateDate(
           newTab.date.getFullYear(),
           newTab.month-2,
           this.activeDate
@@ -118,7 +128,7 @@ export default {
         this.offset++;
       }
       else if(newIndex===lastIndex){
-        var date=this.generateDate(
+        date=this.generateDate(
           newTab.date.getFullYear(),
           newTab.month,
           this.activeDate
@@ -134,14 +144,6 @@ export default {
     }
   },
   computed:{
-    'monthList':function () {
-      var monthList=[];
-      for(var index in this.tabItem){
-        var tab=this.tabItem[index];
-        monthList.push(tab.date);
-      }
-      return monthList;
-    }
   },
   methods:{
     'generateDate':function(year,month,date){
@@ -159,9 +161,9 @@ export default {
       this.activeDate=value.date;
 
       var realIndex=this.activeIndex+this.offset;
-      var activeMonth=this.monthList[realIndex];
-      var oldMonth=activeMonth.getMonth();
-      var newMonth=value.month-1;
+      var activeItem=this.tabItem[realIndex];
+      var oldMonth=activeItem.month;
+      var newMonth=value.month;
       var changed=newMonth-oldMonth;
       this.activeIndex=this.activeIndex+changed;
     }

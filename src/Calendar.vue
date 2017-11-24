@@ -1,5 +1,5 @@
 <template>
-    <mTable :rows="rows" :header="header">
+    <mTable :rows="rows" :header="header" :id="month">
         <tr v-for="(row,rowId) in rows" :key="rowId">
             <td v-for="(value,key) in header" :key="key">
                 <a v-bind:class="row[key].style" @click="onCellClick(rowId,key,row[key])">
@@ -47,6 +47,7 @@ export default {
     created:function(){
         var thisYear=this.date.getFullYear();
         var thisMonth=this.date.getMonth()+1;
+        this.month=thisMonth;
         this.lastFactor=factorOfMonth(thisYear,thisMonth-1);//上月的因子
         this.factor=factorOfMonth(thisYear,thisMonth);//当前月的因子
 
