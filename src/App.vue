@@ -8,7 +8,9 @@
         <calendar :itemClick="onItemClick" :date="item.date"></calendar>
       </slide>
     </carousel>
-    <mTable :header="header" :rows="todoList"></mTable>
+    <mTable :header="header" :rows="todoList">
+      <slot name="header"></slot>
+    </mTable>
   </div>
 </template>
 
