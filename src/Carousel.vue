@@ -7,6 +7,7 @@
     </div>
 </template>
 <script>
+import {throttle} from './util.js';
 export default {
     name:'carousel',
     data(){
@@ -57,11 +58,16 @@ export default {
             this.startX=event.touches[0].pageX;
         },
         'touchMove':function (event) {
-            this.endX=event.touches[0].pageX;
-            var distance=this.startX-this.endX;
-            if(this.endX>=0&&this.endX<=this.slideWidth){
-                this.translateX=distance+this.copyTranslateX;
+            if(this.onTouchMove){
+                this.onTouchMove.apply(this,[event]);
             }
+            else this.onTouchMove=throttle(function(event){
+                this.endX=event.touches[0].pageX;
+                var distance=this.startX-this.endX;
+                if(this.endX>=0&&this.endX<=this.slideWidth){
+                    this.translateX=distance+this.copyTranslateX;
+                }
+            },100);
         },
         'touchEnd':function (event) {
             this.endX=event.changedTouches[0].pageX;
