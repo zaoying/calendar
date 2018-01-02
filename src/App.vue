@@ -8,9 +8,12 @@
         <calendar :itemClick="onItemClick" :date="item.date"></calendar>
       </slide>
     </carousel>
-    <mTable :header="header" :rows="todoList">
-      <slot name="header"></slot>
-    </mTable>
+    <fixedTable :header="header" :data="todoList">
+      <span slot="column" slot-scope="props">{{props.val.text}}</span>
+      <tr v-for="(row,rowId) in todoList" :key="rowId">
+          <td v-for="(value,key) in header" :key="key">{{row[value.key]}}</td>
+      </tr>
+    </fixedTable>
   </div>
 </template>
 
@@ -21,6 +24,7 @@ import table from './Table.vue';
 import carousel from './Carousel.vue';
 import slide from './Slide.vue';
 import calendar from './Calendar.vue';
+import fixedHeaderTable from './FixedHeaderTable.vue';
 export default {
   name: 'app',
   data () {
@@ -29,7 +33,14 @@ export default {
       activeIndex:0,
       offset:2,
       tabItem:[],
-      header:[],
+      header:[
+        {key:'level',text:'级别'},
+        {key:'no',text:'编号'},
+        {key:'start',text:'开始时间'},
+        {key:'end',text:'结束时间'},
+        {key:'remark',text:'备注'},
+        {key:'repeat',text:'重复'},
+        ],
       todoList:[{
           no:'001',
           start:'09:00:00',
@@ -81,7 +92,8 @@ export default {
     'mTable':table,
     'carousel':carousel,
     'slide':slide,
-    'calendar':calendar
+    'calendar':calendar,
+    'fixedTable':fixedHeaderTable
   },
   watch:{
     'activeDate':function(val,old){

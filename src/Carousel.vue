@@ -84,8 +84,6 @@ export default {
             this.slideTo(this.position);
         },
         'slideTo':function(slideIndex) {
-            // if(slideIndex>=0&&slideIndex<this.childrenNum){
-            // }
             this.position=slideIndex;
             this.swipeEnd(slideIndex);
             this.translateX=this.position*this.slideWidth;
