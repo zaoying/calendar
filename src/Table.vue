@@ -3,7 +3,7 @@
         <thead v-if="showHead">
             <tr>
                 <th v-for="(value,key) in header" :key="key">
-                    <slot name="header" :val="value" :headId="key">{{value}}</slot>
+                    <slot name="header" :head="value">{{value}}</slot>
                 </th>
             </tr>
         </thead>
@@ -29,7 +29,9 @@
             'rows':{
                 type:Array,
                 required:true,
-                default:[]
+                default:function(){
+                    return [];
+                }
             }
         },
         computed:{

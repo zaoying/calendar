@@ -8,8 +8,7 @@
         <calendar :itemClick="onItemClick" :date="item.date"></calendar>
       </slide>
     </carousel>
-    <fixedTable :header="header" :data="todoList">
-      <span slot="column" slot-scope="props">{{props.val.text}}</span>
+    <fixedTable :titles="header" :dataList="todoList">
       <tr v-for="(row,rowId) in todoList" :key="rowId">
           <td v-for="(value,key) in header" :key="key">{{row[value.key]}}</td>
       </tr>

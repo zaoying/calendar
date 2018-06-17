@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="column">
+        <!-- <div class="column">
             <slot name="column">
                 <div></div>
             </slot>
@@ -9,12 +9,12 @@
             <slot name="row">
                 <div></div>
             </slot>
-        </div>
+        </div> -->
         <div class="body">
-            <mTable :header="header" rows="dataList" @scroll="onScroll($event)">
-                <slot name="column" slot="header" class="row">
-                    <div></div>
-                </slot>
+            <mTable :header="titles" :rows="dataList" @scroll="onScroll($event)">
+                <div slot-scope="slotProps" slot="header">
+                    <h5>{{slotProps.head.text}}</h5>
+                </div>
                 <slot></slot>
             </mTable>
         </div>
@@ -33,13 +33,13 @@ export default {
         'mTable':table
     },
     props:{
-            'header':{
+            'titles':{
                 type:Array,
                 default:function(){
                     return [];
                 }
             },
-            'data':{
+            'dataList':{
                 type:Array,
                 default:function(){
                     return [];
@@ -47,12 +47,9 @@ export default {
             }
     },
     computed:{
-        'dataList':function(){
-            return this.data;
-        },
         'rows':function(){
             var rows=[];
-            for(var row in this.data){
+            for(var row in this.dataList){
                 rows.push(row);
             }
             return rows;
