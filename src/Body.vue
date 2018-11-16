@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div class = "body">
     <slot>
         <h1>Body</h1>
     </slot>
@@ -7,12 +7,12 @@
 </template>
 <script>
 export default {
-    name:'body'
+    name: 'body'
 }
 </script>
 <style scoped>
     .body{
-        padding:2% 1%;
+        padding: 2% 1%;
     }
 </style>
 

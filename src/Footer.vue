@@ -1,13 +1,13 @@
 <template>
-    <div class="footer">
+    <div class = "footer">
         <slot>
-            <h2 class="center">Footer</h2>
+            <h2 class = "center">Footer</h2>
         </slot>
     </div>
 </template>
 <script>
 export default {
-    name:'footer'
+    name: 'footer'
 }
 </script>
 <style scoped>

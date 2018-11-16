@@ -1,22 +1,22 @@
 <template>
-    <a class="button" v-bind:href="href" @click="callback">
+    <a class = "button" :href = "href" @click = "callback">
         <slot></slot>
     </a>
 </template>
 <script>
 export default {
-    props:['href','callback']
+    props: ['href', 'callback']
 }
 </script>
 <style scoped>
     .button{
-        display:inline-block;
-        padding:2% 3%;
-        border:1px solid #aaa;
-        border-radius:1%;
+        display: inline-block;
+        padding: 2% 3%;
+        border: 1px solid #aaa;
+        border-radius: 1%;
         text-decoration: none;
     }
-    .button>*{
+    .button > *{
         vertical-align: middle;
     }
 </style>

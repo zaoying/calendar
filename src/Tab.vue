@@ -1,44 +1,44 @@
 <template>
-    <div class="tab">
-        <div v-for="(item,index) in tabItem" :key="index">
-            <slot name="tab" :item="item">
-                <a v-bind:class="[{item:true},{active:item.active}]">{{item.text}}</a>
+    <div class = "tab">
+        <div v-for = "(item, index) in tabItem" :key = "index">
+            <slot name = "tab" :item = "item">
+                <a :class = "[{item: true}, {active: item.active}]">{{item.text}}</a>
             </slot>
         </div>
     </div>
 </template>
 <script>
-    export default{
-        name:'tab',
-        props:['tabItem']
+    export default {
+        name: 'tab',
+        props: ['tabItem']
     };
 </script>
 <style scoped>
     .tab{
-        display:flex;
-        display:-webkit-flex;
-        flex-direction:row;
-        justify-content:space-around;
-        align-items:flex-start;
-        padding:2% 1%;
-        overflow-x:scroll;
+        display: flex;
+        display: -webkit-flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: flex-start;
+        padding: 2% 1%;
+        overflow-x: scroll;
     }
     .tab>div{
         flex: 0 0 20%;
-        display:inline-block;
-        text-align:center;
+        display: inline-block;
+        text-align: center;
     }
     .tab .item{
-        display:inline-block;
-        color:grey;
+        display: inline-block;
+        color: grey;
         line-height: 2em;
         width: 2em;
-        text-align:center;
-        border-radius:50em;
+        text-align: center;
+        border-radius: 50em;
     }
     .tab .item.active{
-        color:white;
-        background-color:rgba(33,33,33,0.5);
+        color: white;
+        background-color: rgba(33, 33, 33, 0.5);
         box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.3);
     }
 </style>

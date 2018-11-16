@@ -1,18 +1,18 @@
 <template>
-    <div class="container">
-        <!-- <div class="column">
-            <slot name="column">
+    <div class = "container">
+        <!-- <div class = "column">
+            <slot name = "column">
                 <div></div>
             </slot>
         </div>
-        <div class="row">
-            <slot name="row">
+        <div class = "row">
+            <slot name = "row">
                 <div></div>
             </slot>
         </div> -->
-        <div class="body">
-            <mTable :header="titles" :rows="dataList" @scroll="onScroll($event)">
-                <div slot-scope="slotProps" slot="header">
+        <div class = "body">
+            <mTable :header = "titles" :rows = "dataList" @scroll = "onScroll($event)">
+                <div slot-scope = "slotProps" slot = "header">
                     <h5>{{slotProps.head.text}}</h5>
                 </div>
                 <slot></slot>
@@ -23,40 +23,40 @@
 <script>
 import table from './Table.vue';
 export default {
-    name:'FixedHeaderTable',
+    name: 'FixedHeaderTable',
     data(){
         return {
 
         };
     },
-    components:{
-        'mTable':table
+    components: {
+        'mTable': table
     },
-    props:{
-            'titles':{
-                type:Array,
-                default:function(){
+    props: {
+            'titles': {
+                type: Array,
+                default: function(){
                     return [];
                 }
             },
-            'dataList':{
-                type:Array,
-                default:function(){
+            'dataList': {
+                type: Array,
+                default: function(){
                     return [];
                 }
             }
     },
-    computed:{
-        'rows':function(){
-            var rows=[];
+    computed: {
+        'rows': function(){
+            var rows = [];
             for(var row in this.dataList){
                 rows.push(row);
             }
             return rows;
         }
     },
-    method:{
-        'onScroll':function(event){
+    method: {
+        'onScroll': function(event){
             console.info(event);
         }
     }
@@ -79,7 +79,7 @@ export default {
         top: 5%;
         left: 0;
         height: 95%;
-        width:5%;
+        width: 5%;
         z-index: 9;
     }
     .container .body{

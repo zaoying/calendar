@@ -12,15 +12,15 @@ export function debounce(fn, idle) {
 export function throttle(fn, atLeast) {
     var previous = null;
     return function () {
-        var ctx=this,args=arguments;
+        var ctx = this, args = arguments;
         var now = new Date().getTime();
         if (!previous) {
             previous = now;
         } else{
-            var interval=now-previous;
+            var interval = now - previous;
             if(interval>atLeast){
                 previous = now;
-                fn.apply(ctx,args);
+                fn.apply(ctx, args);
             }
         }
     };
@@ -33,10 +33,14 @@ export function isInCurrentMonth(year, month) {
     return _year === year && _month === month;
 }
 export function lengthOfMonth(realYear, realMonth) {
-    var month = realMonth - 1; //0表示一月，所以需要减去一
-    var year = realYear + Math.floor(month / 12); //向上取整，计算实际年份
-    month = month % 12 + 1; //求余数，计算实际月份
-    var length; //当前月份有多少天
+    //0表示一月，所以需要减去一
+    var month = realMonth - 1; 
+    //向上取整，计算实际年份
+    var year = realYear + Math.floor(month / 12); 
+    //求余数，计算实际月份
+    month = month % 12 + 1; 
+    //当前月份有多少天
+    var length; 
     if (month === 2) {
         if (year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0)) {
             length = 29;
@@ -50,10 +54,13 @@ export function lengthOfMonth(realYear, realMonth) {
 function factorOfMonth(realYear, realMonth) {
     //当前月份有多少天
     var length = lengthOfMonth(realYear, realMonth);
-
-    var month = realMonth - 1; //0表示一月，所以需要减去一
-    var year = realYear + Math.floor(month / 12); //向上取整，计算实际年份
-    month = month % 12; //求余数，计算实际月份
+    
+    //0表示一月，所以需要减去一
+    var month = realMonth - 1; 
+    //向上取整，计算实际年份
+    var year = realYear + Math.floor(month / 12); 
+    //求余数，计算实际月份
+    month = month % 12; 
 
     //是否在当前月份
     var isCurrentMonth = isInCurrentMonth(year, month);
@@ -62,8 +69,10 @@ function factorOfMonth(realYear, realMonth) {
     now.setFullYear(year);
     now.setMonth(month);
     now.setDate(1);
-    var firstDayOfMonth = now.getDay(); //当前月份第一天是星期几,0表示星期日
-    var lastDayOfMonth = (length + firstDayOfMonth) % 7; //当前月份最后一天是星期几
+    //当前月份第一天是星期几, 0表示星期日
+    var firstDayOfMonth = now.getDay(); 
+    //当前月份最后一天是星期几
+    var lastDayOfMonth = (length + firstDayOfMonth) % 7; 
     return {
         isInCurrentMonth: isCurrentMonth,
         length: length,
