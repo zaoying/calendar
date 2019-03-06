@@ -15,16 +15,12 @@
 </script>
 <style scoped>
     .tab{
-        display: flex;
-        display: -webkit-flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: flex-start;
         padding: 2% 1%;
         overflow-x: scroll;
+        white-space: nowrap;
     }
     .tab>div{
-        flex: 0 0 20%;
+        width: 20%;
         display: inline-block;
         text-align: center;
     }

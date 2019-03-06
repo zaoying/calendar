@@ -3,7 +3,7 @@
     <tab :tabItem = "tabItem">
         <a slot = "tab" slot-scope = "props" :class = "[{item: true}, {active: props.item.active}]">{{props.item.month}}</a>
     </tab>
-    <carousel :initIndex = "activeIndex" :swipeEnd = "onSwipeEnd">
+    <carousel :initIndex = "activeIndex" :swipeEnd = "onSwipeEnd" class="shadow">
       <slide v-for = "(item, index) in tabItem" :key = "item.month" :position = "index - offset">
         <calendar :itemClick = "onItemClick" :date = "item.date"></calendar>
       </slide>
@@ -42,7 +42,7 @@ export default {
         ],
       todoList: [{
           no: '001',
-          start: '09:00:00',
+          start: '08:30:00',
           end: '12:00:00',
           remark: '工作',
           repeat: '每天',
@@ -57,7 +57,7 @@ export default {
         },{
           no: '003',
           start: '14:00:00',
-          end: '18:00:00',
+          end: '17:30:00',
           remark: '工作',
           repeat: '每天',
           level: 1
@@ -125,25 +125,25 @@ export default {
       
       var lastIndex = this.tabItem.length - 1;
       var date;
-      if(newIndex === 0){
+      if(newIndex === 1){
         date = this.generateDate(
           newTab.date.getFullYear(),
-          newTab.month - 2,
+          newTab.month - 3,
           this.activeDate
         );
         var last = {
           index: val - 1,
-          month:  date.getMonth() + 1,
-          date:  date,
+          month: date.getMonth() + 1,
+          date: date,
           active:  false
         };
         this.tabItem.unshift(last);
         this.offset++;
       }
-      else if(newIndex === lastIndex){
+      else if(newIndex === lastIndex - 1){
         date = this.generateDate(
           newTab.date.getFullYear(),
-          newTab.month,
+          newTab.month + 1,
           this.activeDate
         );
         var next = {
@@ -191,6 +191,9 @@ export default {
     height: 100%;
   }
   .container{
-    height: 21em;
+    height: 22em;
+  }
+  .shadow{
+    box-shadow: 0 1px 3px 2px #dddddd
   }
 </style>

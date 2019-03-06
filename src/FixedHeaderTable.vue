@@ -86,9 +86,12 @@ export default {
         position: absolute;
         top: 5%;
         left: 5%;
-        width: 95%;
-        height: 95%;
+        width: 90%;
+        height: 90%;
         overflow: scroll;
+    }
+    thead h5{
+        margin: 0;
     }
 </style>
 
