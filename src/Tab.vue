@@ -10,12 +10,22 @@
 <script>
     export default {
         name: 'tab',
-        props: ['tabItem']
+        props: ['tabItem', 'activeIndex'],
+        mounted() {
+            this.itemWidth = this.$el.clientWidth / 5;
+        },
+        watch:{
+            'activeIndex':function(val, old){
+                this.$nextTick(function(){
+                    this.$el.scrollLeft = val * this.itemWidth;
+                });
+            }
+        }
     };
 </script>
 <style scoped>
     .tab{
-        padding: 2% 1%;
+        padding: 2% 0;
         overflow-x: scroll;
         white-space: nowrap;
     }

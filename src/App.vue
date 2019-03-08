@@ -1,6 +1,6 @@
 <template>
   <div class = "app">
-    <tab :tabItem = "tabItem">
+    <tab :tabItem = "tabItem" :activeIndex = "activeIndex">
         <a slot = "tab" slot-scope = "props" :class = "[{item: true}, {active: props.item.active}]">{{props.item.month}}</a>
     </tab>
     <carousel :initIndex = "activeIndex" :swipeEnd = "onSwipeEnd" class="shadow">
