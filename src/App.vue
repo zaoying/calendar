@@ -19,11 +19,11 @@
 <script>
 import {lengthOfMonth} from './util.js';
 import tab from './Tab.vue';
-import table from './Table.vue';
+import grid from './Grid.vue';
 import carousel from './Carousel.vue';
 import slide from './Slide.vue';
 import calendar from './Calendar.vue';
-import fixedHeaderTable from './FixedHeaderTable.vue';
+import fixedHeaderTable from './FixedHeaderGrid.vue';
 export default {
   name: 'app',
   data () {
@@ -88,7 +88,7 @@ export default {
   },
   components: {
     'tab': tab,
-    'mTable': table,
+    'grid': grid,
     'carousel': carousel,
     'slide': slide,
     'calendar': calendar,

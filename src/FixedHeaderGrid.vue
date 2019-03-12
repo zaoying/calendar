@@ -11,17 +11,17 @@
             </slot>
         </div> -->
         <div class = "body">
-            <mTable :header = "titles" :rows = "dataList" @scroll = "onScroll($event)">
+            <grid :header = "titles" :rows = "dataList" @scroll = "onScroll($event)">
                 <div slot-scope = "slotProps" slot = "header">
                     <h5>{{slotProps.head.text}}</h5>
                 </div>
                 <slot></slot>
-            </mTable>
+            </grid>
         </div>
     </div>
 </template>
 <script>
-import table from './Table.vue';
+import grid from './Grid.vue';
 export default {
     name: 'FixedHeaderTable',
     data(){
@@ -30,7 +30,7 @@ export default {
         };
     },
     components: {
-        'mTable': table
+        'grid': grid
     },
     props: {
             'titles': {

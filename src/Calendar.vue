@@ -1,5 +1,5 @@
 <template>
-    <mTable :rows = "rows" :header = "header" :id = "month">
+    <grid :rows = "rows" :header = "header" :id = "month">
         <tr v-for = "(row, rowId) in rows" :key = "rowId">
             <td v-for = "(value, key) in header" :key = "key">
                 <a :class = "row[key].style" @click = "onCellClick(rowId, key, row[key])">
@@ -7,10 +7,10 @@
                 </a>
             </td>
         </tr>
-    </mTable>
+    </grid>
 </template>
 <script>
-import table from './Table.vue';
+import grid from './Grid.vue';
 import factorOfMonth from './util.js';
 export default {
     name: 'calendar',
@@ -72,7 +72,7 @@ export default {
         }, date);
     },
     components: {
-        'mTable': table
+        'grid': grid
     },
     watch: {
         'date': function(val, old){
