@@ -8,11 +8,11 @@
         <calendar :itemClick = "onItemClick" :date = "item.date"></calendar>
       </slide>
     </carousel>
-    <fixedTable :titles = "header" :dataList = "todoList">
+    <fixedHeaderGrid :titles = "header" :dataList = "todoList">
       <tr v-for = "(row, rowId) in todoList" :key = "rowId">
           <td v-for = "(value, key) in header" :key = "key">{{row[value.key]}}</td>
       </tr>
-    </fixedTable>
+    </fixedHeaderGrid>
   </div>
 </template>
 
@@ -23,7 +23,7 @@ import grid from './Grid.vue';
 import carousel from './Carousel.vue';
 import slide from './Slide.vue';
 import calendar from './Calendar.vue';
-import fixedHeaderTable from './FixedHeaderGrid.vue';
+import fixedHeaderGrid from './FixedHeaderGrid.vue';
 export default {
   name: 'app',
   data () {
@@ -92,7 +92,7 @@ export default {
     'carousel': carousel,
     'slide': slide,
     'calendar': calendar,
-    'fixedTable': fixedHeaderTable
+    'fixedHeaderGrid': fixedHeaderGrid
   },
   watch: {
     'activeDate': function(val, old){
