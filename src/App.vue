@@ -1,10 +1,9 @@
 <template>
   <div class = "app">
-    <tab :tabItem = "tabItem" :activeIndex = "activeIndex">
-        <a slot = "tab" slot-scope = "props" :class = "[{item: true}, {active: props.item.active}]">{{props.item.month}}</a>
-    </tab>
+    <monthView :rows="monthList">
+    </monthView>
     <carousel :initIndex = "activeIndex" :swipeEnd = "onSwipeEnd" class="shadow">
-      <slide v-for = "(item, index) in tabItem" :key = "item.month" :position = "index - offset">
+      <slide v-for = "(item, index) in monthList" :key = "item.month" :position = "index - offset">
         <calendar :itemClick = "onItemClick" :date = "item.date"></calendar>
       </slide>
     </carousel>
@@ -19,7 +18,7 @@
 <script>
 import {lengthOfMonth} from './util.js';
 import tab from './Tab.vue';
-import grid from './Grid.vue';
+import monthView from './views/MonthView.vue';
 import carousel from './Carousel.vue';
 import slide from './Slide.vue';
 import calendar from './Calendar.vue';
@@ -29,9 +28,9 @@ export default {
   data () {
     return {
       activeDate:  1,
-      activeIndex:  0,
-      offset:  2,
-      tabItem: [],
+      monthList: [],
+      offset: 1,
+      activeIndex: 1,
       header: [
         {key: 'level', text: '级别'},
         {key: 'no', text: '编号'},
@@ -65,30 +64,22 @@ export default {
     };
   },
   created: function () {
-      var today = new Date();
-      var thisYear = today.getFullYear();
-      var thisMonth = today.getMonth();
+      let today = new Date();
+      let thisYear = today.getFullYear();
+      let thisMonth = today.getMonth();
+      let thisDate = today.getDate();
       this.activeDate = today.getDate();
-      var tabItem = [];
-      var offset = this.offset;
-      for(var i =- offset; i <= offset; i++){
-        var date = this.generateDate(
-          thisYear,
-          thisMonth + i,
-          this.activeDate
-        );
-        tabItem.push({
-          index: i,
-          active: i === this.activeIndex,
-          month: date.getMonth() + 1,
-          date: date
-        });
-      }
-      this.tabItem = tabItem;
+      
+      let date = this.generateDate(
+        thisYear,
+        thisMonth,
+        thisDate
+      );
+      this.monthList.push(date);
   },
   components: {
     'tab': tab,
-    'grid': grid,
+    'monthView': monthView,
     'carousel': carousel,
     'slide': slide,
     'calendar': calendar,
@@ -106,57 +97,7 @@ export default {
       );
       activeItem.date = date;
       this.tabItem.splice(realIndex, 1, activeItem);
-    },
-    'activeIndex': function (val, old) {
-      var oldIndex = old + this.offset;
-      var newIndex = val + this.offset;
-      var oldTab = this.tabItem[oldIndex];
-      oldTab.active = false;
-      this.tabItem.splice(oldIndex, 1, oldTab);
-      var newTab = this.tabItem[newIndex];
-      newTab.active = true;
-      var activeDate = newTab.date;
-      newTab.date = this.generateDate(
-          activeDate.getFullYear(),
-          activeDate.getMonth(),
-          this.activeDate
-      );
-      this.tabItem.splice(newIndex, 1, newTab);
-      
-      var lastIndex = this.tabItem.length - 1;
-      var date;
-      if(newIndex === 1){
-        date = this.generateDate(
-          newTab.date.getFullYear(),
-          newTab.month - 3,
-          this.activeDate
-        );
-        var last = {
-          index: val - 1,
-          month: date.getMonth() + 1,
-          date: date,
-          active:  false
-        };
-        this.tabItem.unshift(last);
-        this.offset++;
-      }
-      else if(newIndex === lastIndex - 1){
-        date = this.generateDate(
-          newTab.date.getFullYear(),
-          newTab.month + 1,
-          this.activeDate
-        );
-        var next = {
-          index: val + 1,
-          month: date.getMonth() + 1,
-          date: date,
-          active: false
-        };
-        this.tabItem.push(next);
-      }
     }
-  },
-  computed: {
   },
   methods: {
     'generateDate': function(year, month, date){
