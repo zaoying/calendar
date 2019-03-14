@@ -1,9 +1,9 @@
 <template>
-    <grid :rows = "rows" :header = "header" :id = "month">
-        <tr v-for = "(row, rowId) in rows" :key = "rowId">
+    <grid :rows = "weeks" :header = "header" :id = "month">
+        <tr v-for = "(week, weekId) in weeks" :key = "weekId">
             <td v-for = "(value, key) in header" :key = "key">
-                <a :class = "row[key].style" @click = "onCellClick(rowId, key, row[key])">
-                    {{row[key].date}}
+                <a :class = "week[key].style" @click = "onCellClick(weekId, key, week[key])">
+                    {{week[key].date}}
                 </a>
             </td>
         </tr>
@@ -37,7 +37,7 @@ export default {
     data(){
         return {
             header: ['日', '一', '二', '三', '四', '五', '六'],
-            rows: [],
+            weeks: [],
             style: {'item': true},
             invalidStyle: {'item': true, 'invalid': true},
             activeStyle: {'item': true, 'active': true},
@@ -92,8 +92,14 @@ export default {
         }
     },
     methods: {
-        'onCellClick': function(rowId, colId, value){
+        'onPreMonthSelected': function(weekId, day, value){
+            
+        },
+        'onCellClick': function(weekId, colId, value){
             this.itemClick(value);
+        },
+        'onNextMonthSelected': function(weekId, day, value){
+            
         },
         'createItem': function(year, month, style){
             var Item = function(){};

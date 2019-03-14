@@ -1,6 +1,6 @@
 <template>
   <div class = "app">
-    <monthView :rows="monthList">
+    <monthView :activeMonth="activeMonth">
     </monthView>
     <carousel :initIndex = "activeIndex" :swipeEnd = "onSwipeEnd" class="shadow">
       <slide v-for = "(item, index) in monthList" :key = "item.month" :position = "index - offset">
@@ -31,6 +31,7 @@ export default {
       monthList: [],
       offset: 1,
       activeIndex: 1,
+      activeMonth: 1,
       header: [
         {key: 'level', text: '级别'},
         {key: 'no', text: '编号'},
@@ -68,6 +69,7 @@ export default {
       let thisYear = today.getFullYear();
       let thisMonth = today.getMonth();
       let thisDate = today.getDate();
+      this.activeMonth = thisMonth + 1;
       this.activeDate = today.getDate();
       
       let date = this.generateDate(
