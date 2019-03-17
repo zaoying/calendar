@@ -1,9 +1,13 @@
+'use strict';
+
+console.info(generateWeeks(new Date()));
+
 /**
  * 计算月份天数
  * @param {Number} year 年份
  * @param {Number} month 月份 
  */
-export function lengthOfMonth(year, month) {
+function lengthOfMonth(year, month) {
     //向上取整，计算自然年份
     year = year + Math.floor(month / 12); 
     //求余数，计算自然月份
@@ -24,7 +28,17 @@ export function lengthOfMonth(year, month) {
  * 返回当前日期所在月份的星期列表
  * @param {Date} year 日期
  */
-export function generateWeeks(date){
+function generateWeeks(date){
+
+    function Last(){
+    
+    }
+    function Now(){
+    
+    }
+    function Next(){
+    
+    }
 
     //星期列表
     let weekList = [];
@@ -53,6 +67,7 @@ export function generateWeeks(date){
         let week = [];
         let now = new Date();
     
+
         for(let day = 7; day > 0; day--){
             let actualDate = offset - day;
             now.setFullYear(year);
