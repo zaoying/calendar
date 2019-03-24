@@ -1,6 +1,6 @@
 'use strict';
 
-// console.info(generateWeeks(new Date()));
+console.info(generateWeeks(new Date()));
 
 /**
  * 月份枚举
@@ -66,8 +66,9 @@ function lengthOfMonth(month) {
 /**
  * 返回当前日期所在月份的星期列表
  * @param {Date} year 日期
+ * @param {Number} firstDayOfWeek 每周的第一天：1-周日，2-周一
  */
-function generateWeeks(date){
+function generateWeeks(date, firstDayOfWeek = 1){
     //星期列表
     let weekList = [];
 
@@ -75,25 +76,28 @@ function generateWeeks(date){
     let month = date.getMonth();
     let now = new Date();
     now.setDate(1);
-    let firstDayOfMonth = now.getDay();
+    let firstDayOfMonth = now.getDay()- firstDayOfWeek;
 
-    for(var i = 0; i < 5; i++){
-        let offset = firstDayOfMonth + i * 7 - 1;
-        let week = generateWeek(offset);
+    for(var i = 0; true; i++){
+        let firstDateOfWeek = i * 7 - firstDayOfMonth;
+        let week = generateWeek(firstDateOfWeek);
         weekList.push(week);
+        let currentMonth = now.getMonth();
+        if(currentMonth > month){
+            break;
+        }
     }
 
     return weekList;
 
     /**
      * 返回当前日期所在的星期
-     * @param {Number} offset 日
+     * @param {Number} firstDateOfWeek 日
      */
-    function generateWeek(offset){
+    function generateWeek(firstDateOfWeek){
         let week = [];
-        let now = new Date();
-        for(let day = 7; day > 0; day--){
-            let actualDate = offset - day;
+        for(let day = 0; day < 7; day++){
+            let actualDate = firstDateOfWeek + day;
             now.setFullYear(year);
             now.setMonth(month);
             now.setDate(actualDate);
@@ -115,5 +119,4 @@ function generateWeeks(date){
         MONTH_ENUM.push(new Month(length, monthName, index + 1));
         index++;
     }
-    console.info(MONTH_ENUM);
 })();
