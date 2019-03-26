@@ -1,5 +1,8 @@
 <template>
     <grid :rows="monthList">
+        <tr v-for = "(season, seasonId) in monthList" :key = "seasonId">
+            <td v-for = "(month, key) in season" :key = "key">{{month.month}}</td>
+        </tr>
     </grid>
 </template>
 <script>
@@ -8,31 +11,27 @@ export default {
     name: 'app',
     data () {
         return {
-            monthList: []
+            monthList: [
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9],
+                [10, 11, 12]
+            ]
         }
     },
     props: {
         'activeMonth': {
             type: Number,
-            default: 0
+            default: 1
         }
     },
     components: {
         'grid': grid
     },
     created() {
-        let month = 1;
-        for(let i = 0; i < 4; i++){
-            let season = [];
-            for(let j = 0; j < 3; j++){
-                season.push({
-                    month: month,
-                    active: activeMonth == month
-                });
-                month++;
-            }
-            this.monthList.push(season);
-        }
+        this.monthList = this.monthList.map(
+            season => season.map(
+                month => month = {month: month, active: month === this.activeMonth}));
     },
     watch: {
         'activeMonth': function (val, old) {

@@ -72,12 +72,15 @@ export default {
       this.activeMonth = thisMonth + 1;
       this.activeDate = today.getDate();
       
-      let date = this.generateDate(
-        thisYear,
-        thisMonth,
-        thisDate
-      );
-      this.monthList.push(date);
+      let lastMonth = new Date();
+      lastMonth.setMonth(thisMonth - 1);
+
+      let nextMonth = new Date();
+      nextMonth.setMonth(thisMonth + 1);
+
+      this.monthList.push(lastMonth);
+      this.monthList.push(today);
+      this.monthList.push(nextMonth);
   },
   components: {
     'tab': tab,

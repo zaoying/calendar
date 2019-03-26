@@ -116,3 +116,5 @@ function generateWeeks(date, firstDayOfWeek = 1){
         index++;
     }
 })();
+
+export default generateWeeks;

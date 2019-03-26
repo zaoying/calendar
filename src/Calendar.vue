@@ -3,7 +3,7 @@
         <tr v-for = "(week, weekId) in weeks" :key = "weekId">
             <td v-for = "(value, key) in header" :key = "key">
                 <a :class = "week[key].style" @click = "onCellClick(weekId, key, week[key])">
-                    {{week[key].date}}
+                    {{week[key].date.date}}
                 </a>
             </td>
         </tr>
@@ -11,7 +11,7 @@
 </template>
 <script>
 import grid from './Grid.vue';
-import factorOfMonth from './util.js';
+import generateWeeks from './calendar.js';
 export default {
     name: 'calendar',
     props: {
@@ -38,6 +38,7 @@ export default {
         return {
             header: ['日', '一', '二', '三', '四', '五', '六'],
             weeks: [],
+            month: 1,
             style: {'item': true},
             invalidStyle: {'item': true, 'invalid': true},
             activeStyle: {'item': true, 'active': true},
@@ -48,28 +49,18 @@ export default {
         var thisYear = this.date.getFullYear();
         var thisMonth = this.date.getMonth() + 1;
         this.month = thisMonth;
-        //上月的因子
-        this.lastFactor = factorOfMonth(thisYear, thisMonth - 1);
-        //当前月的因子
-        this.factor = factorOfMonth(thisYear, thisMonth);
 
-        this.Last = this.createItem(thisYear, thisMonth - 1, this.invalidStyle);
-        this.This = this.createItem(thisYear, thisMonth, this.style);
-        this.Next = this.createItem(thisYear, thisMonth + 1, this.invalidStyle);
-        this.rows = this.generateRows();
-        if(this.factor.isInCurrentMonth){
-            var today = new Date().getDate();
-            this.handleItem(function(item){
-                item.today = true;
-                return item;
-            }, today);
-        }
-        var activeStyle = this.activeStyle;
-        var date = this.date.getDate();
-        this.handleItem(function(item){
-            item.style = activeStyle;
-            return item;
-        }, date);
+        this.Last = this.createItem(this.invalidStyle);
+        this.This = this.createItem(this.style);
+        this.Next = this.createItem(this.invalidStyle);
+        this.weeks = this.generateRows();
+        
+        // let activeStyle = this.activeStyle;
+        // var date = this.date.getDate();
+        // this.handleItem(function(item){
+        //     item.style = activeStyle;
+        //     return item;
+        // }, date);
     },
     components: {
         'grid': grid
@@ -101,14 +92,12 @@ export default {
         'onNextMonthSelected': function(weekId, day, value){
             
         },
-        'createItem': function(year, month, style){
-            var Item = function(){};
-            Item.prototype = {
-                year: year,
-                month: month,
-                style: style
+        'createItem': function(style){
+            return function(date){
+                this.style = style
+                this.date = date;
             };
-            return Item;
+            Item;
         },
         'handleItem': function(callback, rowNum, colNum){
             var row, item, muteItem;
@@ -138,37 +127,26 @@ export default {
             }
         },
         'generateRows': function () {
-            var Last = this.Last;
-            var This = this.This;
-            var Next = this.Next;
+            let Last = this.Last;
+            let This = this.This;
+            let Next = this.Next;
 
-            var thisFactor = this.factor;
-            var lastFactor = this.lastFactor;
-
-            var rows = [];
-            var k = 1;
-            //上个月最后一个星期日是几号
-            var lastSundayOfLastMonth = lastFactor.length - thisFactor.firstDayOfMonth;
-            //当前月份最后一天在日历中的位置
-            var positionOfLastDate = thisFactor.firstDayOfMonth + thisFactor.length;
-            while(k <= positionOfLastDate){
-                var row = [];
-                for(var j = 0; j < 7; j++){
-                    var item;
-                    if(k <= thisFactor.firstDayOfMonth){
-                        item = new Last();
-                        item.date = lastSundayOfLastMonth + k;
+            let rows = [];
+            let weeks = generateWeeks(this.date);
+            for(let week of weeks){
+                let row = [];
+                for(let day of week){
+                    let item;
+                    if (day.month === this.month){
+                        item = new This(day);
                     }
-                    else if(k <= positionOfLastDate){
-                        item = new This();
-                        item.date = k - thisFactor.firstDayOfMonth;
+                    else if(day.month < this.month){
+                        item = new Last(day);
                     }
                     else{
-                        item = new Next();
-                        item.date = k - positionOfLastDate;
+                        item = new Next(day);
                     }
                     row.push(item);
-                    k++;
                 }
                 rows.push(row);
             }

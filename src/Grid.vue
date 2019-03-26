@@ -1,6 +1,6 @@
 <template>
-    <table class = "table">
-        <thead v-if = "showHead">
+    <table class = "table" v-if = "showHead">
+        <thead>
             <tr>
                 <th v-for = "(value, key) in header" :key = "key">
                     <slot name = "header" :head = "value">{{value}}</slot>
@@ -11,6 +11,15 @@
             <slot :rows = "rows" :header = "header">
                 <tr v-for = "(row, rowId) in rows" :key = "rowId">
                     <td v-for = "(value, key) in header" :key = "key">{{row[key]}}</td>
+                </tr>
+            </slot>
+        </tbody>
+    </table>
+    <table class = "table" v-else>
+        <tbody>
+            <slot :rows = "rows">
+                <tr v-for = "(row, rowId) in rows" :key = "rowId">
+                    <td v-for = "(value, key) in row" :key = "key">{{row[key]}}</td>
                 </tr>
             </slot>
         </tbody>
