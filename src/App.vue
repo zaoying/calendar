@@ -1,8 +1,8 @@
 <template>
   <div class = "app">
-    <monthView :activeMonth="activeMonth">
+    <monthView ref="monthView" :activeMonth="activeMonth" class="transtion" :style="monthViewStyle">
     </monthView>
-    <carousel :initIndex = "activeIndex" :swipeEnd = "onSwipeEnd" class="shadow">
+    <carousel :initIndex = "activeIndex" :swipeEnd = "onSwipeEnd" class="transition carousel" :style="carouselStyle">
       <slide v-for = "(item, index) in monthList" :key = "item.month" :position = "index - offset">
         <calendar :itemClick = "onItemClick" :date = "item.date"></calendar>
       </slide>
@@ -32,6 +32,11 @@ export default {
       offset: 1,
       activeIndex: 1,
       activeMonth: 1,
+      monthViewColumnHeight: 0,
+      monthViewTranslateY: 0,
+      monthViewStyle:{},
+      carouselMarginTop: 0,
+      carouselStyle:{},
       header: [
         {key: 'level', text: '级别'},
         {key: 'no', text: '编号'},
@@ -82,6 +87,12 @@ export default {
       this.monthList.push(today);
       this.monthList.push(nextMonth);
   },
+  mounted() {
+      this.monthViewColumnHeight = this.$refs.monthView.$el.querySelector('tbody>tr').offsetHeight;
+      let actvieSeason = Math.floor(this.activeMonth / 3);
+      this.monthViewTranslateY = - actvieSeason * this.monthViewColumnHeight;
+      this.carouselMarginTop = - 3 * this.monthViewColumnHeight;
+  },
   components: {
     'tab': tab,
     'monthView': monthView,
@@ -102,6 +113,16 @@ export default {
       );
       activeItem.date = date;
       this.tabItem.splice(realIndex, 1, activeItem);
+    },
+    'monthViewTranslateY': function(val, old){
+      this.monthViewStyle = {
+          transform: 'translateY(' + val + 'px)'
+      };
+    },
+    'carouselMarginTop': function(val, old){
+      this.carouselStyle = {
+          marginTop: val + 'px'
+      };
     }
   },
   methods: {
@@ -135,11 +156,20 @@ export default {
     display: -webkit-flex;
     flex-flow: column nowrap;
     height: 100%;
+    padding: 1%;
   }
   .container{
     height: 22em;
   }
-  .shadow{
-    box-shadow: 0 1px 3px 2px #dddddd
+  .transition{
+      -webkit-transition: transform 500ms ease;
+      -moz-transition: transform 500ms ease;
+      transition: transform 500ms ease;
+  }
+  .carousel{
+    border-radius: 1em;
+    background-color: #fff;
+    box-shadow: 0 1px 3px 2px #dddddd;
+    z-index: 9;
   }
 </style>
