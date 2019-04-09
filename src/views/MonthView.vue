@@ -56,6 +56,9 @@ export default {
 };
 </script>
 <style scoped>
+tr>td{
+    padding: 1.5%;
+}
 .item{
     display: inline-block;
     border-radius: 50em;
