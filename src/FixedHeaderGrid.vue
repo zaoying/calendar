@@ -65,6 +65,7 @@ export default {
 <style scoped>
     .container{
         position: relative;
+        height: 10em;
     }
     .container .column{
         position: absolute;

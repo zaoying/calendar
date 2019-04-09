@@ -1,5 +1,5 @@
 <template>
-    <div class = "container" @touchstart = "touchStart($event)" @touchmove = "touchMove($event)" 
+    <div class = "carousel" @touchstart = "touchStart($event)" @touchmove = "touchMove($event)" 
     @touchend = "touchEnd($event)" @touchcancel = "touchCancel($event)">
         <div class = "wrapper" :style = "style">
             <slot></slot>
@@ -92,12 +92,12 @@ export default {
 };
 </script>
 <style scoped>
-    .container{
+    .carousel{
         width: 100%;
         overflow: hidden;
         white-space: nowrap;
     }
-    .container .wrapper{
+    .carousel .wrapper{
         position: relative;
         height: 100%;
         transform: translateX(0);

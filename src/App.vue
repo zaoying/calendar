@@ -158,15 +158,13 @@ export default {
     height: 100%;
     padding: 1%;
   }
-  .container{
-    height: 22em;
-  }
   .transition{
       -webkit-transition: transform 500ms ease;
       -moz-transition: transform 500ms ease;
       transition: transform 500ms ease;
   }
   .carousel{
+    height: 22em;
     border-radius: 1em;
     background-color: #fff;
     box-shadow: 0 1px 3px 2px #dddddd;
