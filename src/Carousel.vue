@@ -48,7 +48,7 @@ export default {
         },
         'translateX': function (val, old) {
             this.style = {
-                transform: 'translateX(' + ( 0 - this.translateX) + 'px)'
+                transform: 'translateX(' + ( 0 - val) + 'px)'
             };
         }
     },
