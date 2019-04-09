@@ -57,15 +57,11 @@ export default {
 </script>
 <style scoped>
 tr>td{
-    padding: 1.5%;
+    padding: 1%;
 }
 .item{
-    display: inline-block;
-    border-radius: 50em;
-}
-.active.item{
-    color: #fff;
-    background-color: #333333;
+    width: 1.5em;
+    line-height: 1.5em;
 }
 </style>
 
