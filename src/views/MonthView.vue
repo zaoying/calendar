@@ -1,7 +1,9 @@
 <template>
     <grid :rows="monthList">
         <tr v-for = "(season, seasonId) in monthList" :key = "seasonId">
-            <td v-for = "(month, key) in season" :key = "key">{{month.month}}</td>
+            <td v-for = "(month, key) in season" :key = "key">
+                <div :class="{item: true, active: month.active}">{{month.month}}</div>
+            </td>
         </tr>
     </grid>
 </template>
@@ -53,3 +55,14 @@ export default {
     }
 };
 </script>
+<style scoped>
+.item{
+    display: inline-block;
+    border-radius: 50em;
+}
+.active.item{
+    color: #fff;
+    background-color: #333333;
+}
+</style>
+
